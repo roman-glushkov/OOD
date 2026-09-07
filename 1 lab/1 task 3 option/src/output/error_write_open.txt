@@ -1,2 +1,0 @@
-Invalid arguments count
-Usage: copyfile.exe <input file> <output file>
