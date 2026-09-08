@@ -6,15 +6,16 @@
 
 class CRectangle : public IShape {
 public:
-    CRectangle(const CPoint& p1, const CPoint& p2);
+    CRectangle(const CPoint& p1, const CPoint& p2, const sf::RectangleShape& shape);
     
     double GetArea() const override;
     double GetPerimeter() const override;
-    std::string ToString() const override;
     void Draw(sf::RenderWindow& window) const override;
+    
+protected:
+    std::string GetTypePrefix() const override { return "RECTANGLE"; }
     
 private:
     CPoint m_p1, m_p2;
-    mutable sf::RectangleShape m_sfmlShape;
-    mutable bool m_initialized = false;
+    sf::RectangleShape m_shape;
 };

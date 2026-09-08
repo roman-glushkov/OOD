@@ -1,10 +1,9 @@
 // CTriangle.cpp
 #include "CTriangle.h"
 #include <cmath>
-#include <sstream>
 
-CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3)
-    : m_p1(p1), m_p2(p2), m_p3(p3) {}
+CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3, const sf::ConvexShape& shape)
+    : m_p1(p1), m_p2(p2), m_p3(p3), m_shape(shape) {}
 
 double CTriangle::GetArea() const {
     return std::abs(
@@ -23,25 +22,6 @@ double CTriangle::GetPerimeter() const {
     return distance(m_p1, m_p2) + distance(m_p2, m_p3) + distance(m_p3, m_p1);
 }
 
-std::string CTriangle::ToString() const {
-    std::ostringstream oss;
-    oss << "TRIANGLE: P=" << GetPerimeter() << "; S=" << GetArea();
-    return oss.str();
-}
-
 void CTriangle::Draw(sf::RenderWindow& window) const {
-    if (!m_initialized) {
-        m_sfmlShape.setPointCount(3);
-        m_sfmlShape.setPoint(0, sf::Vector2f(static_cast<float>(m_p1.x), static_cast<float>(m_p1.y)));
-        m_sfmlShape.setPoint(1, sf::Vector2f(static_cast<float>(m_p2.x), static_cast<float>(m_p2.y)));
-        m_sfmlShape.setPoint(2, sf::Vector2f(static_cast<float>(m_p3.x), static_cast<float>(m_p3.y)));
-        
-        m_sfmlShape.setFillColor(sf::Color(100, 255, 100, 150));
-        m_sfmlShape.setOutlineColor(sf::Color::Black);
-        m_sfmlShape.setOutlineThickness(2.0f);
-        
-        m_initialized = true;
-    }
-    
-    window.draw(m_sfmlShape);
+    window.draw(m_shape); 
 }

@@ -6,18 +6,17 @@
 
 class CCircle : public IShape {
 public:
-    CCircle(const CPoint& center, double radius);
+    CCircle(const CPoint& center, double radius, const sf::CircleShape& shape);
     
     double GetArea() const override;
     double GetPerimeter() const override;
-    std::string ToString() const override;
-    void Draw(sf::RenderWindow& window) const override;  // Новый метод
+    void Draw(sf::RenderWindow& window) const override;
+    
+protected:
+    std::string GetTypePrefix() const override { return "CIRCLE"; }
     
 private:
     CPoint m_center;
     double m_radius;
-    
-    // Адаптируемый объект SFML (создается при первом вызове Draw)
-    mutable sf::CircleShape m_sfmlShape;
-    mutable bool m_initialized = false;
+    sf::CircleShape m_shape;
 };
