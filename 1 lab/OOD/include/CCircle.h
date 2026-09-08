@@ -1,16 +1,14 @@
 // CCircle.h
 #pragma once
-#include "IShape.h"
+#include "ShapeAdapter.h"
 #include "CPoint.h"
-#include <SFML/Graphics.hpp>
 
-class CCircle : public IShape {
+class CCircle : public ShapeAdapter<sf::CircleShape> {
 public:
-    CCircle(const CPoint& center, double radius, const sf::CircleShape& shape);
+    CCircle(const CPoint& center, double radius);
     
     double GetArea() const override;
     double GetPerimeter() const override;
-    void Draw(sf::RenderWindow& window) const override;
     
 protected:
     std::string GetTypePrefix() const override { return "CIRCLE"; }
@@ -18,5 +16,4 @@ protected:
 private:
     CPoint m_center;
     double m_radius;
-    sf::CircleShape m_shape;
 };
