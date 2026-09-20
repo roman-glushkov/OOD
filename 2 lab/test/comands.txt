@@ -1,0 +1,10 @@
+g++ -std=c++17 test_sfml.cpp -I"C:/msys64/ucrt64/include" -L"C:/msys64/ucrt64/lib" -lsfml-graphics -lsfml-window -lsfml-system -o test_sfml.exe
+$env:PATH = "C:\msys64\ucrt64\bin;" + $env:PATH    
+.\test_sfml.exe  
+
+g++ -std=c++17 -I./include -o app.exe src/main.cpp src/CTriangle.cpp src/CRectangle.cpp src/CCircle.cpp
+./app.exe
+
+g++ -std=c++17 src/main.cpp src/CTriangle.cpp src/CRectangle.cpp src/CCircle.cpp -I./include -I"C:/msys64/ucrt64/include" -L"C:/msys64/ucrt64/lib" -lsfml-graphics -lsfml-window -lsfml-system -o app.exe
+$env:PATH = "C:\msys64\ucrt64\bin;" + $env:PATH  
+.\app.exe --draw  

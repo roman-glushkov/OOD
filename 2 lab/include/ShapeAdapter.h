@@ -2,14 +2,13 @@
 #include "IShape.h"
 #include <SFML/Graphics.hpp>
 
-template <typename TSfmlShape> // тип SFML-фигуры
+template <typename TSfmlShape>
 class ShapeAdapter : public IShape {
 public:
-    // рисуем фигуру в окне
-    void Draw(sf::RenderWindow& window) const override { 
+    void Draw(sf::RenderWindow& window) const override {
         window.draw(m_shape);
     }
-
+    
 protected:
     TSfmlShape m_shape;
 };
