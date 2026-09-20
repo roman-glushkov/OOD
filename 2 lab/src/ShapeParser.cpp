@@ -1,6 +1,7 @@
 #include "../include/ShapeParser.h" 
 #include <sstream>
 
+// разбираем строку с координатами точки
 CPoint ShapeParser::ParsePoint(const std::string& str) {
     size_t comma = str.find(',');
     double x = std::stod(str.substr(0, comma));
@@ -8,6 +9,7 @@ CPoint ShapeParser::ParsePoint(const std::string& str) {
     return CPoint(x, y);
 }
 
+// получаем значение нужного параметра из строки
 std::string ShapeParser::GetParamValue(const std::string& line, const std::string& paramName) {
     size_t pos = line.find(paramName + "=");
     size_t end = line.find(';', pos);
@@ -15,20 +17,23 @@ std::string ShapeParser::GetParamValue(const std::string& line, const std::strin
     return line.substr(pos + paramName.length() + 1, end - pos - paramName.length() - 1);
 }
 
+// разбираем строку и заполняем данные фигуры
 ShapeParser::ParsedData ShapeParser::Parse(const std::string& line) {
     ParsedData result;
-    
+
     if (line.find("TRIANGLE:") == 0) {
         result.type = "TRIANGLE";
         result.points.push_back(ParsePoint(GetParamValue(line, "P1")));
         result.points.push_back(ParsePoint(GetParamValue(line, "P2")));
         result.points.push_back(ParsePoint(GetParamValue(line, "P3")));
     }
+
     else if (line.find("RECTANGLE:") == 0) {
         result.type = "RECTANGLE";
         result.points.push_back(ParsePoint(GetParamValue(line, "P1")));
         result.points.push_back(ParsePoint(GetParamValue(line, "P2")));
     }
+
     else if (line.find("CIRCLE:") == 0) {
         result.type = "CIRCLE";
         result.points.push_back(ParsePoint(GetParamValue(line, "C")));

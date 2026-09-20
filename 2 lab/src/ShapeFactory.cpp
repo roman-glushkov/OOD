@@ -3,6 +3,7 @@
 #include "../include/CRectangle.h"
 #include "../include/CCircle.h"
 
+// создаём конкретную фигуру по данным из парсера
 std::unique_ptr<IShape> ShapeFactory::Create(const ShapeParser::ParsedData& data) {
     if (data.type == "TRIANGLE") {
         return std::make_unique<CTriangle>(data.points[0], data.points[1], data.points[2]);

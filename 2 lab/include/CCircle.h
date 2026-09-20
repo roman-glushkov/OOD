@@ -8,9 +8,11 @@ public:
     
     double GetArea() const override;
     double GetPerimeter() const override;
+    bool Contains(const sf::Vector2f& point) const override;
     
 protected:
     std::string GetTypePrefix() const override { return "CIRCLE"; }
+    sf::Color GetDefaultOutlineColor() const override;
     
 private:
     CPoint m_center;
