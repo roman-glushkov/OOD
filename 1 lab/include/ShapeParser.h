@@ -2,13 +2,14 @@
 #include <string>
 #include <vector>     
 #include "CPoint.h"
+#include "../utils/Config.h"
 
 class ShapeParser {
 public:
     struct ParsedData { 
         std::string type; // тип фигуры
         std::vector<CPoint> points; // точки
-        double radius = 0.0; // радиус
+        double radius = Config::DEFAULT_RADIUS; // радиус
     };
     
     static ParsedData Parse(const std::string& line); // разбираем строку и получаем данные фигуры

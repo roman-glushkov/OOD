@@ -1,5 +1,6 @@
 #include "../include/CTriangle.h"
 #include "../utils/Colors.h"
+#include "../utils/Config.h"
 #include <cmath>
 
 CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3) : m_p1(p1), m_p2(p2), m_p3(p3) {
@@ -13,7 +14,7 @@ CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3) : m_p
 }
 
 double CTriangle::GetArea() const {
-    return std::abs(m_p1.x * (m_p2.y - m_p3.y) + m_p2.x * (m_p3.y - m_p1.y) + m_p3.x * (m_p1.y - m_p2.y)) / 2.0;
+    return std::abs(m_p1.x * (m_p2.y - m_p3.y) + m_p2.x * (m_p3.y - m_p1.y) + m_p3.x * (m_p1.y - m_p2.y)) / Config::AREA_DIVISOR;
 }
 
 double CTriangle::GetPerimeter() const {

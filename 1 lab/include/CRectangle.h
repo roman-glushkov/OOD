@@ -10,7 +10,7 @@ public:
     double GetPerimeter() const override;
     
 protected:
-    std::string GetTypePrefix() const override { return "RECTANGLE"; }
+    std::string GetTypePrefix() const override { return Config::TYPE_RECTANGLE; }
     
 private:
     CPoint m_p1, m_p2;

@@ -10,7 +10,7 @@ public:
     double GetPerimeter() const override;
     
 protected:
-    std::string GetTypePrefix() const override { return "CIRCLE"; }
+    std::string GetTypePrefix() const override { return Config::TYPE_CIRCLE; }
     
 private:
     CPoint m_center;

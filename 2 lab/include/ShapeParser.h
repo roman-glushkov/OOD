@@ -1,19 +1,20 @@
 #pragma once
 #include <string>
-#include <vector>     
+#include <vector>
+#include "../utils/Config.h"
 #include "CPoint.h"
 
 class ShapeParser {
 public:
-    struct ParsedData { 
-        std::string type; // тип фигуры
-        std::vector<CPoint> points; // точки
-        double radius = 0.0; // радиус
+    struct ParsedData {
+        std::string type;
+        std::vector<CPoint> points;
+        double radius = Config::DEFAULT_RADIUS;
     };
-    
-    static ParsedData Parse(const std::string& line); // разбираем строку и получаем данные фигуры
-    
+
+    static ParsedData Parse(const std::string& line);
+
 private:
-    static CPoint ParsePoint(const std::string& str); // получаем точки
-    static std::string GetParamValue(const std::string& line, const std::string& paramName); // получаем параметры
+    static CPoint ParsePoint(const std::string& str);
+    static std::string GetParamValue(const std::string& line, const std::string& paramName);
 };

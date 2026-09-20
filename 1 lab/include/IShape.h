@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <SFML/Graphics.hpp>
+#include "../utils/Config.h"
 
 class IShape {
 public:
@@ -16,8 +17,8 @@ public:
     std::string ToString() const {
         std::ostringstream oss;
         oss << GetTypePrefix()
-            << ": P=" << FormatNumber(GetPerimeter())
-            << "; S=" << FormatNumber(GetArea());
+            << Config::LABEL_SEPARATOR << Config::LABEL_PERIMETER << FormatNumber(GetPerimeter())
+            << Config::VALUE_SEPARATOR << Config::LABEL_AREA      << FormatNumber(GetArea());
         return oss.str();
     }
 
@@ -26,14 +27,12 @@ protected:
     virtual std::string GetTypePrefix() const = 0;
 
 private:
-    // форматируем вывод
-    static std::string FormatNumber(double value) { 
+    static std::string FormatNumber(double value) {
         if (value == static_cast<int>(value)) {
             return std::to_string(static_cast<int>(value));
         }
-
         std::ostringstream oss;
-        oss << std::fixed << std::setprecision(2) << value;
+        oss << std::fixed << std::setprecision(Config::PRECISION) << value;
         return oss.str();
     }
 };

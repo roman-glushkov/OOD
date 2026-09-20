@@ -1,8 +1,10 @@
 #pragma once
+#include "../utils/Config.h"
 
 struct CPoint {
     double x;
     double y;
-    
-    CPoint(double x = 0.0, double y = 0.0) : x(x), y(y) {}
+
+    CPoint(double x = Config::DEFAULT_COORDINATE, double y = Config::DEFAULT_COORDINATE)
+        : x(x), y(y) {}
 };

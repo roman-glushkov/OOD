@@ -10,7 +10,7 @@ public:
     double GetPerimeter() const override;
     
 protected:
-    std::string GetTypePrefix() const override { return "TRIANGLE"; }
+    std::string GetTypePrefix() const override { return Config::TYPE_TRIANGLE; }
     
 private:
     CPoint m_p1, m_p2, m_p3;

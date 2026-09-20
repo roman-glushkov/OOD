@@ -2,16 +2,16 @@
 #include "../include/CTriangle.h"
 #include "../include/CRectangle.h"
 #include "../include/CCircle.h"
+#include "../utils/Config.h"
 
-// создаём конкретную фигуру по данным из парсера
 std::unique_ptr<IShape> ShapeFactory::Create(const ShapeParser::ParsedData& data) {
-    if (data.type == "TRIANGLE") {
+    if (data.type == Config::TYPE_TRIANGLE) {
         return std::make_unique<CTriangle>(data.points[0], data.points[1], data.points[2]);
     }
-    else if (data.type == "RECTANGLE") {
+    else if (data.type == Config::TYPE_RECTANGLE) {
         return std::make_unique<CRectangle>(data.points[0], data.points[1]);
     }
-    else if (data.type == "CIRCLE") {
+    else if (data.type == Config::TYPE_CIRCLE) {
         return std::make_unique<CCircle>(data.points[0], data.radius);
     }
     return nullptr;

@@ -1,6 +1,7 @@
 #pragma once
 #include "ShapeAdapter.h"
 #include "CPoint.h"
+#include "../utils/Config.h"
 
 class CTriangle : public ShapeAdapter<sf::ConvexShape> {
 public:
@@ -9,9 +10,10 @@ public:
     double GetArea() const override;
     double GetPerimeter() const override;
     bool Contains(const sf::Vector2f& point) const override;
+    void Move(float dx, float dy) override;
 
 protected:
-    std::string GetTypePrefix() const override { return "TRIANGLE"; }
+    std::string GetTypePrefix() const override { return Config::TYPE_TRIANGLE; }
     sf::Color GetDefaultOutlineColor() const override;
 
 private:

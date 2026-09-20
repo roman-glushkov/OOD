@@ -1,9 +1,11 @@
 #include "../include/CTriangle.h"
 #include "../utils/Colors.h"
 #include "../utils/HitTest.h"
+#include "../utils/Config.h"
 #include <cmath>
 
-CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3) : m_p1(p1), m_p2(p2), m_p3(p3) {
+CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3)
+    : m_p1(p1), m_p2(p2), m_p3(p3) {
     m_shape.setPointCount(3);
     m_shape.setPoint(0, sf::Vector2f(static_cast<float>(p1.x), static_cast<float>(p1.y)));
     m_shape.setPoint(1, sf::Vector2f(static_cast<float>(p2.x), static_cast<float>(p2.y)));
@@ -14,7 +16,9 @@ CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3) : m_p
 }
 
 double CTriangle::GetArea() const {
-    return std::abs(m_p1.x * (m_p2.y - m_p3.y) + m_p2.x * (m_p3.y - m_p1.y) + m_p3.x * (m_p1.y - m_p2.y)) / 2.0;
+    return std::abs(m_p1.x * (m_p2.y - m_p3.y)
+                  + m_p2.x * (m_p3.y - m_p1.y)
+                  + m_p3.x * (m_p1.y - m_p2.y)) / Config::AREA_DIVISOR;
 }
 
 double CTriangle::GetPerimeter() const {
@@ -32,4 +36,14 @@ bool CTriangle::Contains(const sf::Vector2f& point) const {
 
 sf::Color CTriangle::GetDefaultOutlineColor() const {
     return ShapeColors::TriangleOutline();
+}
+
+void CTriangle::Move(float dx, float dy) {
+    m_p1.x += dx;
+    m_p1.y += dy;
+    m_p2.x += dx;
+    m_p2.y += dy;
+    m_p3.x += dx;
+    m_p3.y += dy;
+    m_shape.move({dx, dy});
 }
