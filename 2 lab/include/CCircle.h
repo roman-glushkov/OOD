@@ -3,7 +3,8 @@
 #include "CPoint.h"
 #include "../utils/Config.h"
 
-class CCircle : public ShapeAdapter<sf::CircleShape> {
+class CCircle : public ShapeAdapter<sf::CircleShape> 
+{
 public:
     CCircle(const CPoint& center, double radius);
 
@@ -12,8 +13,9 @@ public:
     bool Contains(const sf::Vector2f& point) const override;
     void Move(float dx, float dy) override;
 
-protected:
     std::string GetTypePrefix() const override { return Config::TYPE_CIRCLE; }
+
+protected:
     sf::Color GetDefaultOutlineColor() const override;
 
 private:

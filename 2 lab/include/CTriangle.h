@@ -3,7 +3,8 @@
 #include "CPoint.h"
 #include "../utils/Config.h"
 
-class CTriangle : public ShapeAdapter<sf::ConvexShape> {
+class CTriangle : public ShapeAdapter<sf::ConvexShape> 
+{
 public:
     CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3);
 
@@ -12,8 +13,9 @@ public:
     bool Contains(const sf::Vector2f& point) const override;
     void Move(float dx, float dy) override;
 
-protected:
     std::string GetTypePrefix() const override { return Config::TYPE_TRIANGLE; }
+
+protected:
     sf::Color GetDefaultOutlineColor() const override;
 
 private:

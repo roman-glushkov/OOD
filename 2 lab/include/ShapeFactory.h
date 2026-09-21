@@ -3,7 +3,8 @@
 #include "IShape.h"
 #include "ShapeParser.h"
 
-class ShapeFactory {
+class ShapeFactory 
+{
 public:
     static std::unique_ptr<IShape> Create(const ShapeParser::ParsedData& data);
 };

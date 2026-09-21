@@ -10,6 +10,7 @@
 #include "../include/ShapeFactory.h"
 #include "../include/CompositeShape.h"
 #include "../utils/Config.h"
+#include "../include/ShapeFormatter.h"
 
 int main(int argc, char* argv[]) {
     bool showGraphics = false;
@@ -31,12 +32,12 @@ int main(int argc, char* argv[]) {
 
     std::ofstream out(Config::OUTPUT_FILE);
     for (const auto& shape : shapes) {
-        out << shape->ToString() << std::endl;
+        out << ShapeFormatter::ToString(*shape) << std::endl;
     }
 
     std::cout << Config::MSG_SHAPES_PROCESSED << shapes.size() << std::endl;
     for (const auto& shape : shapes) {
-        std::cout << shape->ToString() << std::endl;
+        std::cout << ShapeFormatter::ToString(*shape) << std::endl;
     }
 
     if (showGraphics) {

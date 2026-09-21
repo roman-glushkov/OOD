@@ -4,9 +4,11 @@
 #include "../utils/Config.h"
 #include "CPoint.h"
 
-class ShapeParser {
+class ShapeParser 
+{
 public:
-    struct ParsedData {
+    struct ParsedData 
+    {
         std::string type;
         std::vector<CPoint> points;
         double radius = Config::DEFAULT_RADIUS;

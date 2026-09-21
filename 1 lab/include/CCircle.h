@@ -2,7 +2,8 @@
 #include "ShapeAdapter.h"
 #include "CPoint.h"
 
-class CCircle : public ShapeAdapter<sf::CircleShape> {
+class CCircle : public ShapeAdapter<sf::CircleShape> 
+{
 public:
     CCircle(const CPoint& center, double radius);
     

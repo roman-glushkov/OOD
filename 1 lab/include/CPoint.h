@@ -1,7 +1,8 @@
 #pragma once
 #include "../utils/Config.h"
 
-struct CPoint {
+struct CPoint 
+{
     double x;
     double y;
 

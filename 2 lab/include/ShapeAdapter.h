@@ -5,23 +5,29 @@
 #include <SFML/Graphics.hpp>
 
 template <typename TSfmlShape>
-class ShapeAdapter : public IShape {
+class ShapeAdapter : public IShape 
+{
 public:
-    void Draw(sf::RenderWindow& window) const override {
+    void Draw(sf::RenderWindow& window) const override 
+    {
         window.draw(m_shape);
     }
 
-    void SetSelected(bool selected) override {
-        if (selected) {
+    void SetSelected(bool selected) override 
+    {
+        if (selected) 
+        {
             m_shape.setOutlineColor(ShapeColors::SelectedOutline());
             m_shape.setOutlineThickness(ShapeColors::OutlineThickness() * Config::SELECTED_THICKNESS_FACTOR);
-        } else {
+        } else 
+        {
             m_shape.setOutlineColor(GetDefaultOutlineColor());
             m_shape.setOutlineThickness(ShapeColors::OutlineThickness());
         }
     }
 
-    void Move(float dx, float dy) override {
+    void Move(float dx, float dy) override 
+    {
         m_shape.move({dx, dy});
     }
 

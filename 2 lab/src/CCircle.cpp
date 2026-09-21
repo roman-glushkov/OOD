@@ -4,7 +4,8 @@
 #include "../utils/Config.h"
 #include <cmath>
 
-CCircle::CCircle(const CPoint& center, double radius) : m_center(center), m_radius(radius) {
+CCircle::CCircle(const CPoint& center, double radius) : m_center(center), m_radius(radius) 
+{
     m_shape.setRadius(static_cast<float>(radius));
     m_shape.setPosition({static_cast<float>(center.x - radius), static_cast<float>(center.y - radius)});
     m_shape.setPointCount(ShapeColors::CirclePointCount());
@@ -13,23 +14,28 @@ CCircle::CCircle(const CPoint& center, double radius) : m_center(center), m_radi
     m_shape.setOutlineThickness(ShapeColors::OutlineThickness());
 }
 
-double CCircle::GetArea() const {
+double CCircle::GetArea() const 
+{
     return Config::PI * m_radius * m_radius;
 }
 
-double CCircle::GetPerimeter() const {
+double CCircle::GetPerimeter() const 
+{
     return Config::FACTOR_TWO * Config::PI * m_radius;
 }
 
-bool CCircle::Contains(const sf::Vector2f& point) const {
+bool CCircle::Contains(const sf::Vector2f& point) const 
+{
     return HitTest::InCircle(point, m_center, m_radius);
 }
 
-sf::Color CCircle::GetDefaultOutlineColor() const {
+sf::Color CCircle::GetDefaultOutlineColor() const 
+{
     return ShapeColors::CircleOutline();
 }
 
-void CCircle::Move(float dx, float dy) {
+void CCircle::Move(float dx, float dy) 
+{
     m_center.x += dx;
     m_center.y += dy;
     m_shape.move({dx, dy});

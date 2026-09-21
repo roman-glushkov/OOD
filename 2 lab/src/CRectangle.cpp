@@ -5,7 +5,8 @@
 #include <cmath>
 #include <algorithm>
 
-CRectangle::CRectangle(const CPoint& p1, const CPoint& p2) : m_p1(p1), m_p2(p2) {
+CRectangle::CRectangle(const CPoint& p1, const CPoint& p2) : m_p1(p1), m_p2(p2) 
+{
     float width  = static_cast<float>(std::abs(p2.x - p1.x));
     float height = static_cast<float>(std::abs(p2.y - p1.y));
     m_shape.setSize(sf::Vector2f(width, height));
@@ -16,7 +17,8 @@ CRectangle::CRectangle(const CPoint& p1, const CPoint& p2) : m_p1(p1), m_p2(p2) 
     m_shape.setOutlineThickness(ShapeColors::OutlineThickness());
 }
 
-double CRectangle::GetArea() const {
+double CRectangle::GetArea() const 
+{
     return std::abs((m_p2.x - m_p1.x) * (m_p2.y - m_p1.y));
 }
 
@@ -26,15 +28,18 @@ double CRectangle::GetPerimeter() const {
     return Config::FACTOR_TWO * (width + height);
 }
 
-bool CRectangle::Contains(const sf::Vector2f& point) const {
+bool CRectangle::Contains(const sf::Vector2f& point) const 
+{
     return HitTest::InRectangle(point, m_p1, m_p2);
 }
 
-sf::Color CRectangle::GetDefaultOutlineColor() const {
+sf::Color CRectangle::GetDefaultOutlineColor() const 
+{
     return ShapeColors::RectangleOutline();
 }
 
-void CRectangle::Move(float dx, float dy) {
+void CRectangle::Move(float dx, float dy) 
+{
     m_p1.x += dx;
     m_p1.y += dy;
     m_p2.x += dx;
