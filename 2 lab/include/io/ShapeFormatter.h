@@ -1,6 +1,6 @@
 #pragma once
-#include "IShape.h"
-#include "../utils/Config.h"
+#include "core/IShape.h"
+#include "utils/Config.h"
 #include <string>
 #include <sstream>
 #include <iomanip>

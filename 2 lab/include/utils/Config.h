@@ -9,12 +9,25 @@ namespace Config
     const double DEFAULT_RADIUS     = 0.0;
     const double FACTOR_TWO         = 2.0;
     const double AREA_DIVISOR       = 2.0;
+    const double ZERO_SUM           = 0.0;
+
+    const int TRIANGLE_POINT_COUNT = 3;
+    const int POINT_INDEX_0 = 0;
+    const int POINT_INDEX_1 = 1;
+    const int POINT_INDEX_2 = 2;
+
+    const std::size_t MIN_SHAPES_FOR_GROUP = 2;
 
     const int PRECISION = 2;
+    const int FIRST_INDEX = 0;
+    const int PARAM_OFFSET_AFTER_NAME = 1;
+    const int COORD_OFFSET_AFTER_COMMA = 1;
+    const int MIN_ARGC_FOR_DRAW = 1;
 
     const std::string TYPE_TRIANGLE  = "TRIANGLE";
     const std::string TYPE_RECTANGLE = "RECTANGLE";
     const std::string TYPE_CIRCLE    = "CIRCLE";
+    const std::string TYPE_COMPOSITE = "COMPOSITE";
 
     const char PARAM_SEPARATOR     = ';';
     const char COORD_SEPARATOR     = ',';

@@ -1,8 +1,8 @@
-#include "../include/ShapeFactory.h"
-#include "../include/CTriangle.h"
-#include "../include/CRectangle.h"
-#include "../include/CCircle.h"
-#include "../utils/Config.h"
+#include "io/ShapeFactory.h"
+#include "shapes/CTriangle.h"
+#include "shapes/CRectangle.h"
+#include "shapes/CCircle.h"
+#include "utils/Config.h"
 
 std::unique_ptr<IShape> ShapeFactory::Create(const ShapeParser::ParsedData& data) 
 {

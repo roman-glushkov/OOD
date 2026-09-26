@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "../utils/Config.h"
-#include "CPoint.h"
+#include "utils/Config.h"
+#include "core/CPoint.h"
 
 class ShapeParser 
 {

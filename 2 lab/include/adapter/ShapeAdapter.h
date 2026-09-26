@@ -1,7 +1,7 @@
 #pragma once
-#include "IShape.h"
-#include "../utils/Colors.h"
-#include "../utils/Config.h"
+#include "core/IShape.h"
+#include "utils/Colors.h"
+#include "utils/Config.h"
 #include <SFML/Graphics.hpp>
 
 template <typename TSfmlShape>

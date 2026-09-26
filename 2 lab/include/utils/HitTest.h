@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/CPoint.h"
+#include "core/CPoint.h"
 #include <SFML/System/Vector2.hpp>
 #include <algorithm>
 

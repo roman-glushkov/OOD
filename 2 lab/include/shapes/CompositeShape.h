@@ -1,5 +1,6 @@
 #pragma once
-#include "IShape.h"
+#include "core/IShape.h"
+#include "utils/Config.h"
 #include <vector>
 #include <memory>
 
@@ -56,19 +57,19 @@ public:
 
     double GetArea() const override 
     {
-        double sum = 0.0;
+        double sum = Config::ZERO_SUM;
         for (const auto& child : m_children) sum += child->GetArea();
         return sum;
     }
 
     double GetPerimeter() const override 
     {
-        double sum = 0.0;
+        double sum = Config::ZERO_SUM;
         for (const auto& child : m_children) sum += child->GetPerimeter();
         return sum;
     }
 
-    std::string GetTypePrefix() const override { return "COMPOSITE"; }
+    std::string GetTypePrefix() const override { return Config::TYPE_COMPOSITE; }
 
 private:
     std::vector<std::unique_ptr<IShape>> m_children;

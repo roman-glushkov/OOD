@@ -1,5 +1,5 @@
 #pragma once
-#include "../utils/Config.h"
+#include "utils/Config.h"
 
 struct CPoint {
     double x;

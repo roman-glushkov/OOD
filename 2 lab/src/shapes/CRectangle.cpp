@@ -1,7 +1,7 @@
-#include "CRectangle.h"
-#include "../utils/Colors.h"
-#include "../utils/HitTest.h"
-#include "../utils/Config.h"
+#include "shapes/CRectangle.h"
+#include "utils/Colors.h"
+#include "utils/HitTest.h"
+#include "utils/Config.h"
 #include <cmath>
 #include <algorithm>
 

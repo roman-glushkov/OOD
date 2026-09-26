@@ -1,7 +1,7 @@
-#include "CCircle.h"
-#include "../utils/Colors.h"
-#include "../utils/HitTest.h"
-#include "../utils/Config.h"
+#include "shapes/CCircle.h"
+#include "utils/Colors.h"
+#include "utils/HitTest.h"
+#include "utils/Config.h"
 #include <cmath>
 
 CCircle::CCircle(const CPoint& center, double radius) : m_center(center), m_radius(radius) 

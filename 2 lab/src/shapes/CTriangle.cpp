@@ -1,15 +1,15 @@
-#include "../include/CTriangle.h"
-#include "../utils/Colors.h"
-#include "../utils/HitTest.h"
-#include "../utils/Config.h"
+#include "shapes/CTriangle.h"
+#include "utils/Colors.h"
+#include "utils/HitTest.h"
+#include "utils/Config.h"
 #include <cmath>
 
 CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3) : m_p1(p1), m_p2(p2), m_p3(p3) 
 {
-    m_shape.setPointCount(3);
-    m_shape.setPoint(0, sf::Vector2f(static_cast<float>(p1.x), static_cast<float>(p1.y)));
-    m_shape.setPoint(1, sf::Vector2f(static_cast<float>(p2.x), static_cast<float>(p2.y)));
-    m_shape.setPoint(2, sf::Vector2f(static_cast<float>(p3.x), static_cast<float>(p3.y)));
+    m_shape.setPointCount(Config::TRIANGLE_POINT_COUNT);
+    m_shape.setPoint(Config::POINT_INDEX_0, sf::Vector2f(static_cast<float>(p1.x), static_cast<float>(p1.y)));
+    m_shape.setPoint(Config::POINT_INDEX_1, sf::Vector2f(static_cast<float>(p2.x), static_cast<float>(p2.y)));
+    m_shape.setPoint(Config::POINT_INDEX_2, sf::Vector2f(static_cast<float>(p3.x), static_cast<float>(p3.y)));
     m_shape.setFillColor(ShapeColors::TriangleFill());
     m_shape.setOutlineColor(ShapeColors::TriangleOutline());
     m_shape.setOutlineThickness(ShapeColors::OutlineThickness());

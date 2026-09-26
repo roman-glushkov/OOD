@@ -1,7 +1,7 @@
 #pragma once
-#include "ShapeAdapter.h"
-#include "CPoint.h"
-#include "../utils/Config.h"
+#include "adapter/ShapeAdapter.h"
+#include "core/CPoint.h"
+#include "utils/Config.h"
 
 class CTriangle : public ShapeAdapter<sf::ConvexShape> 
 {
