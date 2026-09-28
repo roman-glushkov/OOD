@@ -7,22 +7,17 @@
 class CompositeShape : public IShape 
 {
 public:
-    void Add(std::unique_ptr<IShape> shape) 
+    void Add(std::unique_ptr<IShape> shape) // добавить ребёнка
     {
         m_children.push_back(std::move(shape));
     }
 
-    std::vector<std::unique_ptr<IShape>> Release() 
+    std::vector<std::unique_ptr<IShape>> Release() // вытащить всех детей
     {
         return std::move(m_children);
     }
 
-    std::size_t Size() const 
-    { 
-        return m_children.size(); 
-    }
-
-    void Draw(sf::RenderWindow& window) const override 
+    void Draw(sf::RenderWindow& window) const override //
     {
         for (const auto& child : m_children) 
         {
@@ -30,7 +25,7 @@ public:
         }
     }
 
-    bool Contains(const sf::Vector2f& point) const override 
+    bool Contains(const sf::Vector2f& point) const override //
     {
         for (const auto& child : m_children) 
         {
@@ -39,7 +34,7 @@ public:
         return false;
     }
 
-    void SetSelected(bool selected) override 
+    void SetSelected(bool selected) override //
     {
         for (const auto& child : m_children) 
         {
@@ -47,7 +42,7 @@ public:
         }
     }
 
-    void Move(float dx, float dy) override 
+    void Move(float dx, float dy) override //
     {
         for (const auto& child : m_children) 
         {
@@ -55,14 +50,14 @@ public:
         }
     }
 
-    double GetArea() const override 
+    double GetArea() const override //
     {
         double sum = Config::ZERO_SUM;
         for (const auto& child : m_children) sum += child->GetArea();
         return sum;
     }
 
-    double GetPerimeter() const override 
+    double GetPerimeter() const override //
     {
         double sum = Config::ZERO_SUM;
         for (const auto& child : m_children) sum += child->GetPerimeter();

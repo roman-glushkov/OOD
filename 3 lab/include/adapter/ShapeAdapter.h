@@ -31,6 +31,11 @@ public:
         m_shape.move({dx, dy}); 
     }
 
+    sf::FloatRect GetBounds() const override
+    {
+        return m_shape.getGlobalBounds();
+    }
+
 protected:
     TSfmlShape m_shape;
     virtual sf::Color GetDefaultOutlineColor() const = 0; // цвет обводки по умолчанию

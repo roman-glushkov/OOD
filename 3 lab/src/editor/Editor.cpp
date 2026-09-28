@@ -1,5 +1,6 @@
 #include "editor/Editor.h"
 #include "shapes/CompositeShape.h"
+#include "utils/Colors.h"
 #include "utils/Config.h"
 #include <algorithm>
 
@@ -22,11 +23,54 @@ void Editor::Run()
 
         window.clear(sf::Color::White);
         for (const auto& s : m_shapes) s->Draw(window);
+        DrawSelectionFrame(window);
         window.display();
     }
 }
 
-// разбор одного события
+void Editor::DrawSelectionFrame(sf::RenderWindow& window) const 
+{
+    for (IShape* s : m_selected) 
+    {
+        sf::FloatRect b = s->GetBounds();
+
+        b.position.x -= Config::SELECTION_FRAME_PADDING;
+        b.position.y -= Config::SELECTION_FRAME_PADDING;
+        b.size.x += Config::SELECTION_FRAME_PADDING * 2;
+        b.size.y += Config::SELECTION_FRAME_PADDING * 2;
+
+        sf::RectangleShape frame;
+        frame.setPosition(b.position);
+        frame.setSize(b.size);
+        frame.setFillColor(sf::Color::Transparent);
+        frame.setOutlineColor(ShapeColors::SelectionFrameOutline());
+        frame.setOutlineThickness(Config::SELECTION_FRAME_THICKNESS);
+        window.draw(frame);
+
+        const float m = Config::SELECTION_MARKER_SIZE;
+        sf::Vector2f corners[8] = {
+            {b.position.x, b.position.y},
+            {b.position.x + b.size.x / 2, b.position.y},
+            {b.position.x + b.size.x, b.position.y},
+            {b.position.x, b.position.y + b.size.y / 2},
+            {b.position.x + b.size.x, b.position.y + b.size.y / 2},
+            {b.position.x, b.position.y + b.size.y},
+            {b.position.x + b.size.x / 2, b.position.y + b.size.y},
+            {b.position.x + b.size.x, b.position.y + b.size.y}
+        };
+
+        for (int i = 0; i < 8; ++i) 
+        {
+            sf::RectangleShape marker({m, m});
+            marker.setPosition({corners[i].x - m / 2, corners[i].y - m / 2});
+            marker.setFillColor(ShapeColors::SelectionMarkerFill());
+            marker.setOutlineColor(ShapeColors::SelectionMarkerOutline());
+            marker.setOutlineThickness(Config::SELECTION_MARKER_THICKNESS);
+            window.draw(marker);
+        }
+    }
+}
+
 void Editor::HandleEvent(const sf::Event& event) 
 {
     if (auto* k = event.getIf<sf::Event::KeyPressed>())           HandleKeyPressed(*k);
@@ -35,7 +79,6 @@ void Editor::HandleEvent(const sf::Event& event)
     if (auto* m = event.getIf<sf::Event::MouseButtonReleased>())  HandleMouseReleased(*m);
 }
 
-// клавиатура
 void Editor::HandleKeyPressed(const sf::Event::KeyPressed& key) 
 {
     bool ctrl = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl) 
@@ -44,7 +87,6 @@ void Editor::HandleKeyPressed(const sf::Event::KeyPressed& key)
     if (ctrl && key.code == sf::Keyboard::Key::U) UngroupSelected();
 }
 
-// клик мыши: выделение, Shift+клик — мультивыделение, старт drag
 void Editor::HandleMousePressed(const sf::Event::MouseButtonPressed& mouse) 
 {
     if (mouse.button != sf::Mouse::Button::Left) return;
@@ -75,7 +117,6 @@ void Editor::HandleMousePressed(const sf::Event::MouseButtonPressed& mouse)
     }
 }
 
-// движение мыши: если тащим — сдвигаем выделенные
 void Editor::HandleMouseMoved(const sf::Event::MouseMoved& move) 
 {
     if (!m_dragging) return;
@@ -86,19 +127,16 @@ void Editor::HandleMouseMoved(const sf::Event::MouseMoved& move)
     m_lastMouse = pos;
 }
 
-// отпустили кнопку мыши — закончили drag
 void Editor::HandleMouseReleased(const sf::Event::MouseButtonReleased& release) 
 {
     if (release.button == sf::Mouse::Button::Left) m_dragging = false;
 }
 
-// фигура выделена?
 bool Editor::IsSelected(IShape* shape) const 
 {
     return std::find(m_selected.begin(), m_selected.end(), shape) != m_selected.end();
 }
 
-// выделить одну фигуру
 void Editor::SelectOne(IShape* shape) 
 {
     if (!shape || IsSelected(shape)) return;
@@ -106,7 +144,6 @@ void Editor::SelectOne(IShape* shape)
     m_selected.push_back(shape);
 }
 
-// снять выделение с одной фигуры
 void Editor::DeselectOne(IShape* shape) 
 {
     shape->SetSelected(false);
@@ -115,14 +152,12 @@ void Editor::DeselectOne(IShape* shape)
         m_selected.end());
 }
 
-// снять выделение со всех
 void Editor::ClearSelection() 
 {
     for (IShape* s : m_selected) s->SetSelected(false);
     m_selected.clear();
 }
 
-// найти фигуру под курсором (сверху вниз)
 IShape* Editor::FindShapeAt(const sf::Vector2f& pos) 
 {
     for (auto it = m_shapes.rbegin(); it != m_shapes.rend(); ++it) 
@@ -132,7 +167,6 @@ IShape* Editor::FindShapeAt(const sf::Vector2f& pos)
     return nullptr;
 }
 
-// Ctrl+G: объединить выделенные фигуры в одну группу
 void Editor::GroupSelected() 
 {
     if (m_selected.size() < Config::MIN_SHAPES_FOR_GROUP) return;
@@ -158,7 +192,6 @@ void Editor::GroupSelected()
     SelectOne(ptr);
 }
 
-// Ctrl+U: распустить выделенные группы обратно на фигуры
 void Editor::UngroupSelected() 
 {
     std::vector<std::unique_ptr<IShape>> released;
@@ -190,7 +223,6 @@ void Editor::UngroupSelected()
     }
 }
 
-// сдвинуть все выделенные фигуры на (dx, dy)
 void Editor::MoveSelected(float dx, float dy) 
 {
     for (IShape* s : m_selected) s->Move(dx, dy);

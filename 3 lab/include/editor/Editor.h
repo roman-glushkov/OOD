@@ -33,4 +33,6 @@ private:
     void UngroupSelected(); // Ctrl+U
     
     void MoveSelected(float dx, float dy); // сдвинуть выделенные
+
+    void DrawSelectionFrame(sf::RenderWindow& window) const;
 };

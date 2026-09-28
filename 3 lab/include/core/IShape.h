@@ -14,4 +14,5 @@ public:
     virtual bool Contains(const sf::Vector2f& point) const = 0; // проверка попадания точки в фигуру
     virtual void SetSelected(bool selected) = 0; // выделение
     virtual void Move(float dx, float dy) = 0; // перемещение
+    virtual sf::FloatRect GetBounds() const = 0;
 };
