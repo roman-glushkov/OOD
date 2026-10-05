@@ -6,6 +6,7 @@ g++ -std=c++17 -I../include `
     ../src/shapes/CompositeShape.cpp `
     ../src/io/ShapeParser.cpp `
     ../src/io/ShapeFactory.cpp `
+    ../src/io/ShapeFormatter.cpp `
     ../src/editor/Editor.cpp `
     -I"C:/msys64/ucrt64/include" `
     -L"C:/msys64/ucrt64/lib" `
