@@ -2,7 +2,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-class IShape
+class IShape 
 {
 public:
     virtual ~IShape() = default;
@@ -11,8 +11,15 @@ public:
     virtual void Draw(sf::RenderWindow& window) const = 0;
     virtual std::string GetTypePrefix() const = 0;
 
-    virtual bool Contains(const sf::Vector2f& point) const = 0; // проверка попадания точки в фигуру
-    virtual void SetSelected(bool selected) = 0; // выделение
-    virtual void Move(float dx, float dy) = 0; // перемещение
+    virtual bool Contains(const sf::Vector2f& point) const = 0;
+    virtual void SetSelected(bool selected) = 0;
+    virtual void Move(float dx, float dy) = 0;
     virtual sf::FloatRect GetBounds() const = 0;
+
+    virtual void SetOutlineColor(sf::Color color) = 0;
+    virtual void SetFillColor(sf::Color color) = 0;
+    virtual void SetOutlineThickness(float thickness) = 0;
+    virtual sf::Color GetOutlineColor() const = 0;
+    virtual sf::Color GetFillColor() const = 0;
+    virtual float GetOutlineThickness() const = 0;
 };

@@ -13,10 +13,6 @@ public:
 
     bool Contains(const sf::Vector2f& point) const override; //
     void Move(float dx, float dy) override; //
-
-protected:
-    sf::Color GetDefaultOutlineColor() const override; //
-
 private:
     CPoint m_p1, m_p2;
 };

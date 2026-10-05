@@ -5,7 +5,6 @@
 
 namespace HitTest 
 {
-    // точка внутри круга: расстояние от центра <= радиуса (через квадраты)
     inline bool InCircle(const sf::Vector2f& p, const CPoint& center, double radius) 
     {
         double dx = p.x - center.x;
@@ -13,7 +12,6 @@ namespace HitTest
         return (dx * dx + dy * dy) <= (radius * radius);
     }
 
-    // точка внутри прямоугольника: между min/max по X и Y
     inline bool InRectangle(const sf::Vector2f& p, const CPoint& a, const CPoint& b) 
     {
         double minX = std::min(a.x, b.x);
@@ -23,7 +21,6 @@ namespace HitTest
         return p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY;
     }
 
-    // точка внутри треугольника
     inline bool InTriangle(const sf::Vector2f& p, const CPoint& a, const CPoint& b, const CPoint& c) 
     {
         auto sign = [](const CPoint& v1, const CPoint& v2, const sf::Vector2f& pt) 

@@ -34,11 +34,6 @@ bool CRectangle::Contains(const sf::Vector2f& point) const //
     return HitTest::InRectangle(point, m_p1, m_p2);
 }
 
-sf::Color CRectangle::GetDefaultOutlineColor() const //
-{
-    return ShapeColors::RectangleOutline();
-}
-
 void CRectangle::Move(float dx, float dy) //
 {
     m_p1.x += dx;

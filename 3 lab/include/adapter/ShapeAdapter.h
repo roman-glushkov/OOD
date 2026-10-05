@@ -13,30 +13,37 @@ public:
         window.draw(m_shape);
     }
 
-    void SetSelected(bool selected) override // вкл/выкл выделения
+    void SetSelected(bool) override {}
+
+    void Move(float dx, float dy) override 
     {
-        if (selected) 
-        {
-            m_shape.setOutlineColor(ShapeColors::SelectedOutline()); 
-            m_shape.setOutlineThickness(ShapeColors::OutlineThickness() * Config::SELECTED_THICKNESS_FACTOR); 
-        } else 
-        {
-            m_shape.setOutlineColor(GetDefaultOutlineColor());
-            m_shape.setOutlineThickness(ShapeColors::OutlineThickness());
-        }
+        m_shape.move({dx, dy});
     }
 
-    void Move(float dx, float dy) override // сдвиг на (dx, dy)
-    {
-        m_shape.move({dx, dy}); 
-    }
-
-    sf::FloatRect GetBounds() const override
+    sf::FloatRect GetBounds() const override 
     {
         return m_shape.getGlobalBounds();
     }
 
+    void SetOutlineColor(sf::Color color) override 
+    {
+        m_shape.setOutlineColor(color);
+    }
+
+    void SetFillColor(sf::Color color) override 
+    {
+        m_shape.setFillColor(color);
+    }
+
+    void SetOutlineThickness(float thickness) override 
+    {
+        m_shape.setOutlineThickness(thickness);
+    }
+
+    sf::Color GetOutlineColor() const override { return m_shape.getOutlineColor(); }
+    sf::Color GetFillColor() const override    { return m_shape.getFillColor(); }
+    float GetOutlineThickness() const override { return m_shape.getOutlineThickness(); }
+
 protected:
     TSfmlShape m_shape;
-    virtual sf::Color GetDefaultOutlineColor() const = 0; // цвет обводки по умолчанию
 };

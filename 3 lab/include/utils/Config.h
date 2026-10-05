@@ -78,4 +78,18 @@ namespace Config
     const std::string OUTPUT_FILE = "output.txt";
     const std::string ARG_DRAW    = "--draw";
     const std::string MSG_SHAPES_PROCESSED = "Shapes processed: ";
+
+    const int PALETTE_RED_R   = 255, PALETTE_RED_G   = 0,   PALETTE_RED_B   = 0;
+    const int PALETTE_GREEN_R = 0,   PALETTE_GREEN_G = 200, PALETTE_GREEN_B = 0;
+    const int PALETTE_BLUE_R  = 0,   PALETTE_BLUE_G  = 100, PALETTE_BLUE_B  = 255;
+    const int PALETTE_YELLOW_R= 255, PALETTE_YELLOW_G= 220, PALETTE_YELLOW_B= 0;
+    const int PALETTE_BLACK_R = 0,   PALETTE_BLACK_G = 0,   PALETTE_BLACK_B = 0;
+
+    const float THICKNESS_THIN   = 1.0f;
+    const float THICKNESS_MEDIUM = 3.0f;
+    const float THICKNESS_THICK  = 5.0f;
+
+    const float TOOLBAR_HEIGHT      = 40.0f;
+    const float TOOLBAR_BUTTON_SIZE = 30.0f;
+    const float TOOLBAR_PADDING     = 5.0f;
 }

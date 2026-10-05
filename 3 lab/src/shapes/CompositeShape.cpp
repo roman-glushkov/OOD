@@ -81,3 +81,36 @@ sf::FloatRect CompositeShape::GetBounds() const
     }
     return result;
 }
+
+void CompositeShape::SetOutlineColor(sf::Color color) 
+{
+    for (auto& c : m_children) c->SetOutlineColor(color);
+}
+
+void CompositeShape::SetFillColor(sf::Color color) 
+{
+    for (auto& c : m_children) c->SetFillColor(color);
+}
+
+void CompositeShape::SetOutlineThickness(float thickness) 
+{
+    for (auto& c : m_children) c->SetOutlineThickness(thickness);
+}
+
+sf::Color CompositeShape::GetOutlineColor() const 
+{
+    if (m_children.empty()) return sf::Color::Black;
+    return m_children[0]->GetOutlineColor();
+}
+
+sf::Color CompositeShape::GetFillColor() const 
+{
+    if (m_children.empty()) return sf::Color::White;
+    return m_children[0]->GetFillColor();
+}
+
+float CompositeShape::GetOutlineThickness() const 
+{
+    if (m_children.empty()) return 0.0f;
+    return m_children[0]->GetOutlineThickness();
+}

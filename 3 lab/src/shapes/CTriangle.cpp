@@ -38,11 +38,6 @@ bool CTriangle::Contains(const sf::Vector2f& point) const //
     return HitTest::InTriangle(point, m_p1, m_p2, m_p3);
 }
 
-sf::Color CTriangle::GetDefaultOutlineColor() const // 
-{
-    return ShapeColors::TriangleOutline(); 
-}
-
 void CTriangle::Move(float dx, float dy) //
 {
     m_p1.x += dx; 

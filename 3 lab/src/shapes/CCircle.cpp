@@ -29,11 +29,6 @@ bool CCircle::Contains(const sf::Vector2f& point) const //
     return HitTest::InCircle(point, m_center, m_radius);
 }
 
-sf::Color CCircle::GetDefaultOutlineColor() const //
-{
-    return ShapeColors::CircleOutline();
-}
-
 void CCircle::Move(float dx, float dy) //
 {
     m_center.x += dx;
