@@ -12,14 +12,11 @@ public:
     virtual std::string GetTypePrefix() const = 0;
 
     virtual bool Contains(const sf::Vector2f& point) const = 0;
-    virtual void SetSelected(bool selected) = 0;
     virtual void Move(float dx, float dy) = 0;
     virtual sf::FloatRect GetBounds() const = 0;
 
-    virtual void SetOutlineColor(sf::Color color) = 0;
-    virtual void SetFillColor(sf::Color color) = 0;
-    virtual void SetOutlineThickness(float thickness) = 0;
-    virtual sf::Color GetOutlineColor() const = 0;
-    virtual sf::Color GetFillColor() const = 0;
-    virtual float GetOutlineThickness() const = 0;
+    // установить цвет
+    virtual void SetOutlineColor(sf::Color color) = 0; // обводка
+    virtual void SetFillColor(sf::Color color) = 0; // заливка
+    virtual void SetOutlineThickness(float thickness) = 0; // толщина
 };

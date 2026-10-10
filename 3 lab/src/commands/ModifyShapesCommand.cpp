@@ -2,11 +2,7 @@
 
 #include <utility>
 
-ModifyShapesCommand::ModifyShapesCommand(const std::vector<IShape*>& shapes, Action action)
-    : m_shapes(shapes)
-    , m_action(std::move(action))
-{
-}
+ModifyShapesCommand::ModifyShapesCommand(const std::vector<IShape*>& shapes, Action action): m_shapes(shapes), m_action(std::move(action)) {}
 
 void ModifyShapesCommand::Execute()
 {

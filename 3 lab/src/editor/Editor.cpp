@@ -94,10 +94,6 @@ bool Editor::SelectShapeAt(const sf::Vector2f& pos, bool additive)
 
 void Editor::ClearSelection()
 {
-    for (IShape* shape : m_selected)
-    {
-        shape->SetSelected(false);
-    }
     m_selected.clear();
 }
 
@@ -132,7 +128,6 @@ void Editor::SelectOne(IShape* shape)
     {
         return;
     }
-    shape->SetSelected(true);
     m_selected.push_back(shape);
 }
 
@@ -142,21 +137,10 @@ void Editor::DeselectOne(IShape* shape)
     {
         return;
     }
-    shape->SetSelected(false);
     m_selected.erase(
         std::remove(m_selected.begin(), m_selected.end(), shape),
         m_selected.end()
     );
-}
-
-const std::vector<IShape*>& Editor::GetSelected() const
-{
-    return m_selected;
-}
-
-std::vector<std::unique_ptr<IShape>>& Editor::GetShapes()
-{
-    return m_shapes;
 }
 
 void Editor::GroupSelected()
@@ -209,7 +193,6 @@ void Editor::UngroupSelected()
             auto children = composite->Release();
             for (auto& child : children)
             {
-                child->SetSelected(false);
                 released.push_back(std::move(child));
             }
             it = m_shapes.erase(it);
@@ -228,4 +211,15 @@ void Editor::UngroupSelected()
         m_shapes.push_back(std::move(shape));
         SelectOne(raw);
     }
+}
+
+// новое
+const std::vector<IShape*>& Editor::GetSelected() const
+{
+    return m_selected;
+}
+
+std::vector<std::unique_ptr<IShape>>& Editor::GetShapes()
+{
+    return m_shapes;
 }

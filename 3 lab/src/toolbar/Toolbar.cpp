@@ -7,6 +7,7 @@
 #include "shapes/CTriangle.h"
 #include "toolbar/ToolState.h"
 #include "utils/Config.h"
+#include "utils/ConfigToolbar.h"
 
 #include <functional>
 #include <utility>
@@ -14,289 +15,123 @@
 Toolbar::Toolbar(Editor& editor)
     : m_editor(editor)
 {
-    BuildAllButtons();
-    SetCurrentTool(ToolState::CreateDrag());
-    UpdateVisibleButtons();
+    BuildButtons();
+    m_tool = ToolState::CreateDrag();
 }
 
-void Toolbar::BuildAllButtons()
+void Toolbar::BuildButtons()
 {
-    const float size = Config::TOOLBAR_BUTTON_SIZE;
+    using namespace ConfigToolbar;
 
-    // === D — drag ===
-    m_dragButton = std::make_unique<Button>(
-        sf::FloatRect({0, 0}, {size, size}),
-        "D",
-        [this]()
-        {
-            m_mode = Mode::Drag;
-            SetCurrentTool(ToolState::CreateDrag());
-            UpdateVisibleButtons();
-        }
-    );
-    m_dragButton->SetFillColor(sf::Color(180, 220, 255));
-
-    // === T — добавить треугольник ===
-    m_addTriangleButton = std::make_unique<Button>(
-        sf::FloatRect({0, 0}, {size, size}),
-        "T",
-        [this]()
-        {
-            SetCurrentTool(ToolState::CreateAddShape(
-                "Triangle",
-                [](sf::Vector2f pos)
-                {
-                    return std::make_unique<CTriangle>(
-                        CPoint(pos.x, pos.y),
-                        CPoint(pos.x + 80, pos.y),
-                        CPoint(pos.x + 40, pos.y + 80)
-                    );
-                }
-            ));
-            UpdateVisibleButtons();
-        }
-    );
-    m_addTriangleButton->SetFillColor(sf::Color(255, 220, 180));
-
-    // === R — добавить прямоугольник ===
-    m_addRectangleButton = std::make_unique<Button>(
-        sf::FloatRect({0, 0}, {size, size}),
-        "R",
-        [this]()
-        {
-            SetCurrentTool(ToolState::CreateAddShape(
-                "Rectangle",
-                [](sf::Vector2f pos)
-                {
-                    return std::make_unique<CRectangle>(
-                        CPoint(pos.x, pos.y),
-                        CPoint(pos.x + 100, pos.y + 60)
-                    );
-                }
-            ));
-            UpdateVisibleButtons();
-        }
-    );
-    m_addRectangleButton->SetFillColor(sf::Color(255, 200, 200));
-
-    // === C — добавить круг ===
-    m_addCircleButton = std::make_unique<Button>(
-        sf::FloatRect({0, 0}, {size, size}),
-        "C",
-        [this]()
-        {
-            SetCurrentTool(ToolState::CreateAddShape(
-                "Circle",
-                [](sf::Vector2f pos)
-                {
-                    return std::make_unique<CCircle>(
-                        CPoint(pos.x, pos.y),
-                        40.0
-                    );
-                }
-            ));
-            UpdateVisibleButtons();
-        }
-    );
-    m_addCircleButton->SetFillColor(sf::Color(200, 220, 255));
-
-    // === O — режим обводки ===
-    m_outlineButton = std::make_unique<Button>(
-        sf::FloatRect({0, 0}, {size, size}),
-        "O",
-        [this]()
-        {
-            m_mode = Mode::Outline;
-            UpdateVisibleButtons();
-        }
-    );
-    m_outlineButton->SetFillColor(sf::Color(255, 220, 180));
-
-    // === F — режим заливки ===
-    m_fillButton = std::make_unique<Button>(
-        sf::FloatRect({0, 0}, {size, size}),
-        "F",
-        [this]()
-        {
-            m_mode = Mode::Fill;
-            SetCurrentTool(ToolState::CreateFill(m_currentFillColor));
-            UpdateVisibleButtons();
-        }
-    );
-    m_fillButton->SetFillColor(sf::Color(180, 255, 180));
-
-    // === Цвета ===
-    auto addColorButton = [this, size](sf::Color color)
+    auto add = [this](float x, const std::string& label, sf::Color color, std::function<void()> onClick)
     {
         auto btn = std::make_unique<Button>(
-            sf::FloatRect({0, 0}, {size, size}),
-            "",
-            [this, color]()
-            {
-                m_currentFillColor = color;
-
-                const auto& selected = m_editor.GetSelected();
-                if (selected.empty()) return;
-
-                ModifyShapesCommand cmd(
-                    selected,
-                    [this, color](IShape* s)
-                    {
-                        if (m_mode == Mode::Fill)
-                            s->SetFillColor(color);
-                        else
-                            s->SetOutlineColor(color);
-                    }
-                );
-                cmd.Execute();
-            }
-        );
+            sf::FloatRect({x, Y}, {SIZE, SIZE}), label, std::move(onClick));
         btn->SetFillColor(color);
-        m_colorButtons.push_back(std::move(btn));
+        m_buttons.push_back(std::move(btn));
     };
 
-    addColorButton(sf::Color(Config::PALETTE_RED_R,    Config::PALETTE_RED_G,    Config::PALETTE_RED_B));
-    addColorButton(sf::Color(Config::PALETTE_GREEN_R,  Config::PALETTE_GREEN_G,  Config::PALETTE_GREEN_B));
-    addColorButton(sf::Color(Config::PALETTE_BLUE_R,   Config::PALETTE_BLUE_G,   Config::PALETTE_BLUE_B));
-    addColorButton(sf::Color(Config::PALETTE_YELLOW_R, Config::PALETTE_YELLOW_G, Config::PALETTE_YELLOW_B));
-    addColorButton(sf::Color(Config::PALETTE_BLACK_R,  Config::PALETTE_BLACK_G,  Config::PALETTE_BLACK_B));
+    add(POS_DRAG, "D", DragColor(), [this]() { m_tool = ToolState::CreateDrag(); });
+    add(POS_FILL, "F", FillColor(), [this]() { m_tool = ToolState::CreateFill(m_color); });
 
-    // === Толщины ===
-    auto addThicknessButton = [this, size](float t, const std::string& label)
+    add(POS_ADD_TRI, "T", AddColor(), [this]() {
+        m_tool = ToolState::CreateAddShape("T", [](sf::Vector2f p) {
+            return std::make_unique<CTriangle>(
+                CPoint(p.x, p.y),
+                CPoint(p.x + TRI_OFFSET_X1, p.y + TRI_OFFSET_Y1),
+                CPoint(p.x + TRI_OFFSET_X2, p.y + TRI_OFFSET_Y2));
+        });
+    });
+    add(POS_ADD_RECT, "R", AddColor(), [this]() {
+        m_tool = ToolState::CreateAddShape("R", [](sf::Vector2f p) {
+            return std::make_unique<CRectangle>(
+                CPoint(p.x, p.y),
+                CPoint(p.x + RECT_WIDTH, p.y + RECT_HEIGHT));
+        });
+    });
+    add(POS_ADD_CIRC, "C", AddColor(), [this]() {
+        m_tool = ToolState::CreateAddShape("C", [](sf::Vector2f p) {
+            return std::make_unique<CCircle>(CPoint(p.x, p.y), CIRCLE_RADIUS);
+        });
+    });
+
+    const float outlinePositions[] = {POS_COLOR_1, POS_COLOR_2, POS_COLOR_3, POS_COLOR_4, POS_COLOR_5};
+
+    for (int i = 0; i < 5; ++i)
     {
+        sf::Color c = PaletteColor(i);
+
         auto btn = std::make_unique<Button>(
-            sf::FloatRect({0, 0}, {size, size}),
-            label,
-            [this, t]()
-            {
-                const auto& selected = m_editor.GetSelected();
-                if (selected.empty()) return;
-
-                ModifyShapesCommand cmd(
-                    selected,
-                    [t](IShape* s) { s->SetOutlineThickness(t); }
-                );
+            sf::FloatRect({outlinePositions[i], Y}, {SIZE, SIZE}),
+            "",
+            [this, c]() {
+                const auto& sel = m_editor.GetSelected();
+                if (sel.empty()) return;
+                ModifyShapesCommand cmd(sel, [c](IShape* s) { s->SetOutlineColor(c); });
                 cmd.Execute();
-            }
-        );
-        btn->SetFillColor(sf::Color(230, 230, 230));
-        m_thicknessButtons.push_back(std::move(btn));
+            });
+        btn->SetFillColor(c);
+        btn->SetOutlineMode(true);
+        m_buttons.push_back(std::move(btn));
+    }
+
+    const float fillPositions[] = {POS_FILL_COLOR_1, POS_FILL_COLOR_2, POS_FILL_COLOR_3, POS_FILL_COLOR_4, POS_FILL_COLOR_5};
+
+    for (int i = 0; i < 5; ++i)
+    {
+        sf::Color c = PaletteColor(i);
+
+        auto btn = std::make_unique<Button>(
+            sf::FloatRect({fillPositions[i], Y}, {SIZE, SIZE}),
+            "",
+            [this, c]() {
+                const auto& sel = m_editor.GetSelected();
+                if (sel.empty()) return;
+                ModifyShapesCommand cmd(sel, [c](IShape* s) { s->SetFillColor(c); });
+                cmd.Execute();
+            });
+        btn->SetFillColor(c);
+        m_buttons.push_back(std::move(btn));
+    }
+
+    auto addThickness = [this, &add](float x, float t, const std::string& label) {
+        add(x, label, ThickColor(), [this, t]() {
+            const auto& sel = m_editor.GetSelected();
+            if (sel.empty()) return;
+            ModifyShapesCommand cmd(sel, [t](IShape* s) { s->SetOutlineThickness(t); });
+            cmd.Execute();
+        });
     };
 
-    addThicknessButton(Config::THICKNESS_THIN,   "1");
-    addThicknessButton(Config::THICKNESS_MEDIUM, "3");
-    addThicknessButton(Config::THICKNESS_THICK,  "5");
-}
-
-void Toolbar::UpdateVisibleButtons()
-{
-    m_visibleButtons.clear();
-
-    // --- Всегда видимые: D, T, R, C ---
-    m_visibleButtons.push_back(m_dragButton.get());
-    m_visibleButtons.push_back(m_addTriangleButton.get());
-    m_visibleButtons.push_back(m_addRectangleButton.get());
-    m_visibleButtons.push_back(m_addCircleButton.get());
-
-    // --- Если есть выделение ---
-    bool hasSelection = !m_editor.GetSelected().empty();
-
-    if (hasSelection)
-    {
-        m_visibleButtons.push_back(m_outlineButton.get());
-        m_visibleButtons.push_back(m_fillButton.get());
-
-        if (m_mode == Mode::Outline)
-        {
-            for (auto& b : m_colorButtons)     m_visibleButtons.push_back(b.get());
-            for (auto& b : m_thicknessButtons) m_visibleButtons.push_back(b.get());
-        }
-        else if (m_mode == Mode::Fill)
-        {
-            for (auto& b : m_colorButtons) m_visibleButtons.push_back(b.get());
-        }
-    }
-    else
-    {
-        m_mode = Mode::Drag;
-    }
-
-    UpdateButtonsPosition();
-}
-
-void Toolbar::UpdateButtonsPosition()
-{
-    const float size = Config::TOOLBAR_BUTTON_SIZE;
-    float x = Config::TOOLBAR_PADDING;
-    const float y = Config::TOOLBAR_PADDING;
-
-    for (Button* btn : m_visibleButtons)
-    {
-        btn->SetBounds(sf::FloatRect({x, y}, {size, size}));
-        x += size + Config::TOOLBAR_PADDING;
-    }
+    addThickness(POS_THICK_1, Config::THICKNESS_THIN,   "1");
+    addThickness(POS_THICK_2, Config::THICKNESS_MEDIUM, "3");
+    addThickness(POS_THICK_3, Config::THICKNESS_THICK,  "5");
 }
 
 bool Toolbar::HandleEvent(const sf::Event& event)
 {
-    if (event.is<sf::Event::MouseButtonPressed>())
+    if (auto* p = event.getIf<sf::Event::MouseButtonPressed>())
     {
-        UpdateVisibleButtons();
-    }
-
-    if (auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>())
-    {
-        if (mousePressed->position.y < Config::TOOLBAR_HEIGHT)
+        if (p->position.y < Config::TOOLBAR_HEIGHT && p->button == sf::Mouse::Button::Left)
         {
-            if (mousePressed->button == sf::Mouse::Button::Left)
+            sf::Vector2f pos(p->position.x, p->position.y);
+            for (auto& btn : m_buttons)
             {
-                sf::Vector2f pos(
-                    static_cast<float>(mousePressed->position.x),
-                    static_cast<float>(mousePressed->position.y)
-                );
-                for (Button* btn : m_visibleButtons)
-                {
-                    if (btn->Contains(pos))
-                    {
-                        btn->Click();
-                        return true;
-                    }
-                }
+                if (btn->Contains(pos)) { btn->Click(); return true; }
             }
             return true;
         }
     }
 
-    if (m_currentTool)
-    {
-        bool handled = m_currentTool->HandleEvent(event, m_editor);
-        if (handled)
-        {
-            UpdateVisibleButtons();
-        }
-        return handled;
-    }
+    if (m_tool) return m_tool->HandleEvent(event, m_editor);
     return false;
 }
 
 void Toolbar::Draw(sf::RenderWindow& window) const
 {
-    sf::RectangleShape background;
-    background.setSize({
-        static_cast<float>(Config::WINDOW_WIDTH),
-        Config::TOOLBAR_HEIGHT
-    });
-    background.setPosition({0, 0});
-    background.setFillColor(sf::Color(230, 230, 230));
-    window.draw(background);
+    sf::RectangleShape bg({static_cast<float>(Config::WINDOW_WIDTH), Config::TOOLBAR_HEIGHT});
+    bg.setFillColor(sf::Color(230, 230, 230));
+    window.draw(bg);
 
-    for (Button* btn : m_visibleButtons)
-    {
-        btn->Draw(window);
-    }
-}
-
-void Toolbar::SetCurrentTool(std::unique_ptr<ITool> tool)
-{
-    m_currentTool = std::move(tool);
+    for (const auto& btn : m_buttons) btn->Draw(window);
 }

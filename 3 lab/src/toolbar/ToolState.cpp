@@ -7,18 +7,10 @@
 #include <utility>
 #include <vector>
 
-ToolState::ToolState(
-    std::string name,
-    bool isDragMode,
-    PressAction onPressed,
-    MoveAction onMoved,
-    ReleaseAction onReleased
-)
+ToolState::ToolState(std::string name, bool isDragMode, PressAction onPressed)
     : m_name(std::move(name))
     , m_isDragMode(isDragMode)
     , m_onPressed(std::move(onPressed))
-    , m_onMoved(std::move(onMoved))
-    , m_onReleased(std::move(onReleased))
 {
 }
 
@@ -39,9 +31,9 @@ bool ToolState::HandleEvent(const sf::Event& event, Editor& editor)
             static_cast<float>(mousePressed->position.y)
         );
 
-        bool actionSucceeded = m_onPressed(editor, pos, shift);
+        bool ok = m_onPressed(editor, pos, shift);
 
-        if (m_isDragMode && actionSucceeded)
+        if (m_isDragMode && ok)
         {
             m_isDragging = true;
             m_lastMousePos = pos;
@@ -62,17 +54,10 @@ bool ToolState::HandleEvent(const sf::Event& event, Editor& editor)
             static_cast<float>(mouseMoved->position.y)
         );
 
-        if (m_isDragMode)
-        {
-            editor.MoveSelected(
-                pos.x - m_lastMousePos.x,
-                pos.y - m_lastMousePos.y
-            );
-        }
-        else if (m_onMoved)
-        {
-            m_onMoved(editor, pos);
-        }
+        editor.MoveSelected(
+            pos.x - m_lastMousePos.x,
+            pos.y - m_lastMousePos.y
+        );
 
         m_lastMousePos = pos;
         return true;
@@ -83,15 +68,6 @@ bool ToolState::HandleEvent(const sf::Event& event, Editor& editor)
         if (mouseReleased->button != sf::Mouse::Button::Left)
         {
             return false;
-        }
-
-        if (m_onReleased)
-        {
-            sf::Vector2f pos(
-                static_cast<float>(mouseReleased->position.x),
-                static_cast<float>(mouseReleased->position.y)
-            );
-            m_onReleased(editor, pos);
         }
 
         m_isDragging = false;
@@ -114,9 +90,7 @@ std::unique_ptr<ITool> ToolState::CreateDrag()
         [](Editor& editor, sf::Vector2f pos, bool shift)
         {
             return editor.SelectShapeAt(pos, shift);
-        },
-        nullptr,
-        nullptr
+        }
     );
 }
 
@@ -128,24 +102,16 @@ std::unique_ptr<ITool> ToolState::CreateFill(sf::Color color)
         [color](Editor& editor, sf::Vector2f pos, bool)
         {
             IShape* hit = editor.GetShapeAt(pos);
-            if (!hit)
-            {
-                return false;
-            }
+            if (!hit) return false;
 
             std::vector<IShape*> target = {hit};
-            ModifyShapesCommand command(
+            ModifyShapesCommand cmd(
                 target,
-                [color](IShape* shape)
-                {
-                    shape->SetFillColor(color);
-                }
+                [color](IShape* s) { s->SetFillColor(color); }
             );
-            command.Execute();
+            cmd.Execute();
             return true;
-        },
-        nullptr,
-        nullptr
+        }
     );
 }
 
@@ -157,16 +123,11 @@ std::unique_ptr<ITool> ToolState::CreateAddShape(std::string name, Creator creat
         [creator = std::move(creator)](Editor& editor, sf::Vector2f pos, bool)
         {
             auto shape = creator(pos);
-            if (!shape)
-            {
-                return false;
-            }
+            if (!shape) return false;
 
-            AddShapeCommand command(editor.GetShapes(), std::move(shape));
-            command.Execute();
+            AddShapeCommand cmd(editor.GetShapes(), std::move(shape));
+            cmd.Execute();
             return true;
-        },
-        nullptr,
-        nullptr
+        }
     );
 }

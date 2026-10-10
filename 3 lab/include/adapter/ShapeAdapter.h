@@ -13,8 +13,6 @@ public:
         window.draw(m_shape);
     }
 
-    void SetSelected(bool) override {}
-
     void Move(float dx, float dy) override 
     {
         m_shape.move({dx, dy});
@@ -25,24 +23,21 @@ public:
         return m_shape.getGlobalBounds();
     }
 
+    // меняем
     void SetOutlineColor(sf::Color color) override 
     {
-        m_shape.setOutlineColor(color);
+        m_shape.setOutlineColor(color);          
     }
 
     void SetFillColor(sf::Color color) override 
     {
-        m_shape.setFillColor(color);
+        m_shape.setFillColor(color);             
     }
 
     void SetOutlineThickness(float thickness) override 
     {
-        m_shape.setOutlineThickness(thickness);
+        m_shape.setOutlineThickness(thickness);  
     }
-
-    sf::Color GetOutlineColor() const override { return m_shape.getOutlineColor(); }
-    sf::Color GetFillColor() const override    { return m_shape.getFillColor(); }
-    float GetOutlineThickness() const override { return m_shape.getOutlineThickness(); }
 
 protected:
     TSfmlShape m_shape;

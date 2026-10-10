@@ -33,12 +33,12 @@ double CTriangle::GetPerimeter() const
     return distance(m_p1, m_p2) + distance(m_p2, m_p3) + distance(m_p3, m_p1);
 }
 
-bool CTriangle::Contains(const sf::Vector2f& point) const //
+bool CTriangle::Contains(const sf::Vector2f& point) const 
 {
     return HitTest::InTriangle(point, m_p1, m_p2, m_p3);
 }
 
-void CTriangle::Move(float dx, float dy) //
+void CTriangle::Move(float dx, float dy) 
 {
     m_p1.x += dx; 
     m_p1.y += dy;

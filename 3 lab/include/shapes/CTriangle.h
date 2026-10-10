@@ -11,8 +11,8 @@ public:
     double GetPerimeter() const override;
     std::string GetTypePrefix() const override { return Config::TYPE_TRIANGLE; }
 
-    bool Contains(const sf::Vector2f& point) const override; //
-    void Move(float dx, float dy) override; //
+    bool Contains(const sf::Vector2f& point) const override; 
+    void Move(float dx, float dy) override; 
 
 private:
     CPoint m_p1, m_p2, m_p3;

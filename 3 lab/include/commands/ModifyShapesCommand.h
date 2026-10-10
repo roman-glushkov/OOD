@@ -6,10 +6,11 @@
 #include <functional>
 #include <vector>
 
+// команда изменения фигур 
 class ModifyShapesCommand : public ICommand
 {
 public:
-    using Action = std::function<void(IShape*)>;
+    using Action = std::function<void(IShape*)>; // тип действия
 
     ModifyShapesCommand(const std::vector<IShape*>& shapes, Action action);
     void Execute() override;

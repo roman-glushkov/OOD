@@ -24,12 +24,12 @@ double CCircle::GetPerimeter() const
     return Config::FACTOR_TWO * Config::PI * m_radius;
 }
 
-bool CCircle::Contains(const sf::Vector2f& point) const //
+bool CCircle::Contains(const sf::Vector2f& point) const 
 {
     return HitTest::InCircle(point, m_center, m_radius);
 }
 
-void CCircle::Move(float dx, float dy) //
+void CCircle::Move(float dx, float dy) 
 {
     m_center.x += dx;
     m_center.y += dy;

@@ -29,12 +29,12 @@ double CRectangle::GetPerimeter() const
     return Config::FACTOR_TWO * (width + height);
 }
 
-bool CRectangle::Contains(const sf::Vector2f& point) const //
+bool CRectangle::Contains(const sf::Vector2f& point) const 
 {
     return HitTest::InRectangle(point, m_p1, m_p2);
 }
 
-void CRectangle::Move(float dx, float dy) //
+void CRectangle::Move(float dx, float dy) 
 {
     m_p1.x += dx;
     m_p1.y += dy;
