@@ -1,11 +1,10 @@
 #include "toolbar/ToolState.h"
-
 #include "commands/AddShapeCommand.h"
 #include "commands/ModifyShapesCommand.h"
 #include "editor/Editor.h"
-
 #include <utility>
 #include <vector>
+#include "utils/ConfigToolbar.h"
 
 ToolState::ToolState(std::string name, bool isDragMode, PressAction onPressed)
     : m_name(std::move(name))
@@ -18,13 +17,13 @@ bool ToolState::HandleEvent(const sf::Event& event, Editor& editor)
 {
     if (auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>())
     {
+        // клик мыши
         if (mousePressed->button != sf::Mouse::Button::Left || !m_onPressed)
         {
             return false;
         }
 
-        bool shift = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)
-                  || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::RShift);
+        bool shift = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::RShift);
 
         sf::Vector2f pos(
             static_cast<float>(mousePressed->position.x),
@@ -42,6 +41,7 @@ bool ToolState::HandleEvent(const sf::Event& event, Editor& editor)
         return true;
     }
 
+    // движение мыши
     if (auto* mouseMoved = event.getIf<sf::Event::MouseMoved>())
     {
         if (!m_isDragging)
@@ -63,6 +63,7 @@ bool ToolState::HandleEvent(const sf::Event& event, Editor& editor)
         return true;
     }
 
+    // отпускание мыши
     if (auto* mouseReleased = event.getIf<sf::Event::MouseButtonReleased>())
     {
         if (mouseReleased->button != sf::Mouse::Button::Left)
@@ -84,8 +85,9 @@ std::string ToolState::GetName() const
 
 std::unique_ptr<ITool> ToolState::CreateDrag()
 {
+    using namespace ConfigToolbar;
     return std::make_unique<ToolState>(
-        "Drag",
+        TOOL_NAME_DRAG,
         true,
         [](Editor& editor, sf::Vector2f pos, bool shift)
         {
@@ -96,8 +98,9 @@ std::unique_ptr<ITool> ToolState::CreateDrag()
 
 std::unique_ptr<ITool> ToolState::CreateFill(sf::Color color)
 {
+    using namespace ConfigToolbar;
     return std::make_unique<ToolState>(
-        "Fill",
+        TOOL_NAME_FILL,
         false,
         [color](Editor& editor, sf::Vector2f pos, bool)
         {
