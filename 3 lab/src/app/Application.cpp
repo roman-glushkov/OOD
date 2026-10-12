@@ -1,10 +1,8 @@
 #include "app/Application.h"
-
 #include "io/ShapeFactory.h"
 #include "io/ShapeFormatter.h"
 #include "io/ShapeParser.h"
 #include "utils/Config.h"
-
 #include <fstream>
 #include <iostream>
 #include <utility>
@@ -17,15 +15,13 @@ Application& Application::Instance()
 
 void Application::Run(const std::string& inputFile)
 {
+    // чтение фигур
     std::ifstream file(inputFile);
     std::string line;
 
     while (std::getline(file, line))
     {
-        if (line.empty())
-        {
-            continue;
-        }
+        if (line.empty()) continue;
 
         auto data = ShapeParser::Parse(line);
         auto shape = ShapeFactory::Create(data);
@@ -35,6 +31,7 @@ void Application::Run(const std::string& inputFile)
         }
     }
 
+    // вывод
     std::ofstream out(Config::OUTPUT_FILE);
     std::cout << Config::MSG_SHAPES_PROCESSED << m_shapes.size() << std::endl;
 
@@ -45,12 +42,14 @@ void Application::Run(const std::string& inputFile)
         std::cout << result << std::endl;
     }
 
+    // создание окна
     m_window.create(
         sf::VideoMode({Config::WINDOW_WIDTH, Config::WINDOW_HEIGHT}),
         Config::WINDOW_TITLE
     );
 
-    m_editor = std::make_unique<Editor>(m_shapes);
+    // тулбар
+    m_editor  = std::make_unique<Editor>(m_shapes);
     m_toolbar = std::make_unique<Toolbar>(*m_editor);
 
     while (m_window.isOpen())
@@ -63,6 +62,7 @@ void Application::Run(const std::string& inputFile)
                 continue;
             }
 
+            // горячие клавиши: Ctrl+G / Ctrl+U
             if (auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
             {
                 bool ctrl = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl)
@@ -70,13 +70,13 @@ void Application::Run(const std::string& inputFile)
 
                 if (ctrl && keyPressed->code == sf::Keyboard::Key::G)
                 {
-                    m_editor->GroupSelected();
+                    m_editor->GroupSelected();     
                     continue;
                 }
 
                 if (ctrl && keyPressed->code == sf::Keyboard::Key::U)
                 {
-                    m_editor->UngroupSelected();
+                    m_editor->UngroupSelected();    
                     continue;
                 }
             }
@@ -85,13 +85,16 @@ void Application::Run(const std::string& inputFile)
         }
 
         m_window.clear(sf::Color::White);
+
         for (const auto& shape : m_shapes)
         {
             shape->Draw(m_window);
         }
 
         m_editor->DrawSelectionFrame(m_window);
+
         m_toolbar->Draw(m_window);
+
         m_window.display();
     }
 }

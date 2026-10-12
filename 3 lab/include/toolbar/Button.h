@@ -6,7 +6,7 @@
 class Button 
 {
 public:
-    Button(sf::FloatRect bounds, const std::string& label, std::function<void()> onClick);
+    Button(sf::FloatRect bounds, const std::string& label, std::function<void()> onClick); // конструктор
     bool Contains(sf::Vector2f pos) const; // попала ли точка в кнопку
     void Click();                                                    
     void SetFillColor(sf::Color c) { m_fillColor = c; }              

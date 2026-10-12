@@ -20,7 +20,7 @@ public:
 
     // фабрики создание инструмента
     static std::unique_ptr<ITool> CreateDrag();
-    static std::unique_ptr<ITool> CreateFill(sf::Color color);
+    static std::unique_ptr<ITool> CreateFill();
     static std::unique_ptr<ITool> CreateAddShape(std::string name, Creator creator);
 
 private:

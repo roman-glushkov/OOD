@@ -30,8 +30,13 @@ void Toolbar::BuildButtons()
         m_buttons.push_back(std::move(btn));
     };
 
-    add(POS_DRAG, LABEL_DRAG, DragColor(), [this]() { m_tool = ToolState::CreateDrag(); });
+    // drag кнопка
+    add(POS_DRAG, LABEL_DRAG, DragColor(), [this]() { m_tool = ToolState::CreateDrag(); m_isFillMode = false; });
 
+    // fill кнопка
+    add(POS_FILL, LABEL_FILL, FillColor(), [this]() { m_tool = ToolState::CreateFill(); m_isFillMode = true; });
+
+    // кнопки добавления фигур
     add(POS_ADD_TRI, LABEL_TRIANGLE, AddColor(), [this]() {
         m_tool = ToolState::CreateAddShape(TOOL_TRIANGLE, [](sf::Vector2f p) {
             return std::make_unique<CTriangle>(
@@ -39,6 +44,7 @@ void Toolbar::BuildButtons()
                 CPoint(p.x + TRI_OFFSET_X1, p.y + TRI_OFFSET_Y1),
                 CPoint(p.x + TRI_OFFSET_X2, p.y + TRI_OFFSET_Y2));
         });
+        m_isFillMode = false;
     });
     add(POS_ADD_RECT, LABEL_RECT, AddColor(), [this]() {
         m_tool = ToolState::CreateAddShape(TOOL_RECT, [](sf::Vector2f p) {
@@ -46,13 +52,16 @@ void Toolbar::BuildButtons()
                 CPoint(p.x, p.y),
                 CPoint(p.x + RECT_WIDTH, p.y + RECT_HEIGHT));
         });
+        m_isFillMode = false;
     });
     add(POS_ADD_CIRC, LABEL_CIRCLE, AddColor(), [this]() {
         m_tool = ToolState::CreateAddShape(TOOL_CIRCLE, [](sf::Vector2f p) {
             return std::make_unique<CCircle>(CPoint(p.x, p.y), CIRCLE_RADIUS);
         });
+        m_isFillMode = false;
     });
 
+    // кнопки цветов обводки
     const float outlinePositions[] = {POS_COLOR_1, POS_COLOR_2, POS_COLOR_3, POS_COLOR_4, POS_COLOR_5};
 
     for (int i = 0; i < PALETTE_SIZE; ++i)
@@ -63,6 +72,7 @@ void Toolbar::BuildButtons()
             sf::FloatRect({outlinePositions[i], Y}, {SIZE, SIZE}),
             LABEL_EMPTY,
             [this, c]() {
+                if (!m_isFillMode) return;
                 const auto& sel = m_editor.GetSelected();
                 if (sel.empty()) return;
                 ModifyShapesCommand cmd(sel, [c](IShape* s) { s->SetOutlineColor(c); });
@@ -73,6 +83,7 @@ void Toolbar::BuildButtons()
         m_buttons.push_back(std::move(btn));
     }
 
+    // кнопки цветов заливки
     const float fillPositions[] = {POS_FILL_COLOR_1, POS_FILL_COLOR_2, POS_FILL_COLOR_3, POS_FILL_COLOR_4, POS_FILL_COLOR_5};
 
     for (int i = 0; i < PALETTE_SIZE; ++i)
@@ -83,6 +94,7 @@ void Toolbar::BuildButtons()
             sf::FloatRect({fillPositions[i], Y}, {SIZE, SIZE}),
             LABEL_EMPTY,
             [this, c]() {
+                if (!m_isFillMode) return;
                 const auto& sel = m_editor.GetSelected();
                 if (sel.empty()) return;
                 ModifyShapesCommand cmd(sel, [c](IShape* s) { s->SetFillColor(c); });
@@ -92,8 +104,10 @@ void Toolbar::BuildButtons()
         m_buttons.push_back(std::move(btn));
     }
 
+    // кнопки толщины
     auto addThickness = [this, &add](float x, float t, const std::string& label) {
         add(x, label, ThickColor(), [this, t]() {
+            if (!m_isFillMode) return;
             const auto& sel = m_editor.GetSelected();
             if (sel.empty()) return;
             ModifyShapesCommand cmd(sel, [t](IShape* s) { s->SetOutlineThickness(t); });

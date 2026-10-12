@@ -1,11 +1,9 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
 #include <string>
 
 class Editor;
 
-// интерфейс инструмента
 class ITool
 {
 public:

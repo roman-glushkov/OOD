@@ -83,6 +83,7 @@ std::string ToolState::GetName() const
     return m_name;
 }
 
+// три фабрики
 std::unique_ptr<ITool> ToolState::CreateDrag()
 {
     using namespace ConfigToolbar;
@@ -96,24 +97,15 @@ std::unique_ptr<ITool> ToolState::CreateDrag()
     );
 }
 
-std::unique_ptr<ITool> ToolState::CreateFill(sf::Color color)
+std::unique_ptr<ITool> ToolState::CreateFill()
 {
-    using namespace ConfigToolbar;
+    using namespace ConfigToolbar; 
     return std::make_unique<ToolState>(
         TOOL_NAME_FILL,
-        false,
-        [color](Editor& editor, sf::Vector2f pos, bool)
+        false,  
+        [](Editor& editor, sf::Vector2f pos, bool shift)
         {
-            IShape* hit = editor.GetShapeAt(pos);
-            if (!hit) return false;
-
-            std::vector<IShape*> target = {hit};
-            ModifyShapesCommand cmd(
-                target,
-                [color](IShape* s) { s->SetFillColor(color); }
-            );
-            cmd.Execute();
-            return true;
+            return editor.SelectShapeAt(pos, shift);  
         }
     );
 }
