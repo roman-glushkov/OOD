@@ -13,6 +13,10 @@ public:
 
     bool Contains(const sf::Vector2f& point) const override; 
     void Move(float dx, float dy) override; 
+    void Accept(IShapeVisitor& visitor) override;
+
+protected:
+    std::unique_ptr<IShape> CloneImpl() const override;
 
 private:
     CPoint m_center;

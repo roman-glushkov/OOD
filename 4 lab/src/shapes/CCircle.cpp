@@ -3,6 +3,7 @@
 #include "utils/HitTest.h"
 #include "utils/Config.h"
 #include <cmath>
+#include "visitors/IShapeVisitor.h"
 
 CCircle::CCircle(const CPoint& center, double radius) : m_center(center), m_radius(radius) 
 {
@@ -34,4 +35,14 @@ void CCircle::Move(float dx, float dy)
     m_center.x += dx;
     m_center.y += dy;
     m_shape.move({dx, dy});
+}
+
+void CCircle::Accept(IShapeVisitor& visitor)
+{
+    visitor.Visit(*this);
+}
+
+std::unique_ptr<IShape> CCircle::CloneImpl() const 
+{
+    return std::make_unique<CCircle>(*this);
 }

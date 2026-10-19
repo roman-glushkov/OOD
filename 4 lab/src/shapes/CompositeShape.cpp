@@ -1,5 +1,6 @@
 #include "shapes/CompositeShape.h"
 #include "utils/Config.h"
+#include "visitors/IShapeVisitor.h"
 
 void CompositeShape::Add(std::unique_ptr<IShape> shape) 
 {
@@ -27,7 +28,6 @@ bool CompositeShape::Contains(const sf::Vector2f& point) const
     }
     return false;
 }
-
 
 void CompositeShape::Move(float dx, float dy) 
 {
@@ -75,7 +75,6 @@ sf::FloatRect CompositeShape::GetBounds() const
     return result;
 }
 
-// новые методы
 void CompositeShape::SetOutlineColor(sf::Color color) 
 {
     for (auto& c : m_children) c->SetOutlineColor(color);
@@ -89,4 +88,43 @@ void CompositeShape::SetFillColor(sf::Color color)
 void CompositeShape::SetOutlineThickness(float thickness) 
 {
     for (auto& c : m_children) c->SetOutlineThickness(thickness);
+}
+
+// геттеры для Memento 
+sf::Color CompositeShape::GetOutlineColor() const
+{
+    if (m_children.empty()) return sf::Color::Black;
+    return m_children[0]->GetOutlineColor();
+}
+
+sf::Color CompositeShape::GetFillColor() const
+{
+    if (m_children.empty()) return sf::Color::White;
+    return m_children[0]->GetFillColor();
+}
+
+float CompositeShape::GetOutlineThickness() const
+{
+    if (m_children.empty()) return 0.0f;
+    return m_children[0]->GetOutlineThickness();
+}
+
+void CompositeShape::Accept(IShapeVisitor& visitor)
+{
+    visitor.Visit(*this); 
+
+    for (auto& child : m_children)
+    {
+        child->Accept(visitor);  
+    }
+}
+
+std::unique_ptr<IShape> CompositeShape::Clone() const
+{
+    auto copy = std::make_unique<CompositeShape>();
+    for (const auto& child : m_children)
+    {
+        copy->Add(child->Clone());
+    }
+    return copy;
 }

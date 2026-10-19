@@ -8,6 +8,6 @@ class ITool
 {
 public:
     virtual ~ITool() = default;
-    virtual bool HandleEvent(const sf::Event& event, Editor& editor) = 0;  // обработать событие
-    virtual std::string GetName() const = 0; // имя инструмента
+    virtual bool HandleEvent(const sf::Event& event, Editor& editor) = 0;
+    virtual std::string GetName() const = 0;
 };

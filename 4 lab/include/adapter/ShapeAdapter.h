@@ -23,7 +23,6 @@ public:
         return m_shape.getGlobalBounds();
     }
 
-    // меняем
     void SetOutlineColor(sf::Color color) override 
     {
         m_shape.setOutlineColor(color);          
@@ -39,6 +38,27 @@ public:
         m_shape.setOutlineThickness(thickness);  
     }
 
+    // геттеры для Memento
+    sf::Color GetOutlineColor() const override
+    {
+        return m_shape.getOutlineColor();
+    }
+
+    sf::Color GetFillColor() const override
+    {
+        return m_shape.getFillColor();
+    }
+
+    float GetOutlineThickness() const override
+    {
+        return m_shape.getOutlineThickness();
+    }
+
+    std::unique_ptr<IShape> Clone() const override
+    {
+        return CloneImpl();
+    }
 protected:
     TSfmlShape m_shape;
+    virtual std::unique_ptr<IShape> CloneImpl() const = 0;
 };

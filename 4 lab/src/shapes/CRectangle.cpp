@@ -4,6 +4,7 @@
 #include "utils/Config.h"
 #include <cmath>
 #include <algorithm>
+#include "visitors/IShapeVisitor.h"
 
 CRectangle::CRectangle(const CPoint& p1, const CPoint& p2) : m_p1(p1), m_p2(p2) 
 {
@@ -41,4 +42,14 @@ void CRectangle::Move(float dx, float dy)
     m_p2.x += dx;
     m_p2.y += dy;
     m_shape.move({dx, dy});
+}
+
+void CRectangle::Accept(IShapeVisitor& visitor)
+{
+    visitor.Visit(*this);
+}
+
+std::unique_ptr<IShape> CRectangle::CloneImpl() const 
+{
+    return std::make_unique<CRectangle>(*this);
 }

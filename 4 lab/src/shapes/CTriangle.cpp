@@ -3,6 +3,7 @@
 #include "utils/HitTest.h"
 #include "utils/Config.h"
 #include <cmath>
+#include "visitors/IShapeVisitor.h"
 
 CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3) : m_p1(p1), m_p2(p2), m_p3(p3) 
 {
@@ -47,4 +48,14 @@ void CTriangle::Move(float dx, float dy)
     m_p3.x += dx;
     m_p3.y += dy;
     m_shape.move({dx, dy});
+}
+
+void CTriangle::Accept(IShapeVisitor& visitor)
+{
+    visitor.Visit(*this);
+}
+
+std::unique_ptr<IShape> CTriangle::CloneImpl() const 
+{
+    return std::make_unique<CTriangle>(*this);
 }

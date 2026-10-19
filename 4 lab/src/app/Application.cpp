@@ -62,21 +62,34 @@ void Application::Run(const std::string& inputFile)
                 continue;
             }
 
-            // горячие клавиши: Ctrl+G / Ctrl+U
+            // горячие клавиши
             if (auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
             {
                 bool ctrl = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl)
-                         || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::RControl);
+                        || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::RControl);
 
                 if (ctrl && keyPressed->code == sf::Keyboard::Key::G)
                 {
-                    m_editor->GroupSelected();     
+                    m_editor->GroupSelected();
                     continue;
                 }
 
                 if (ctrl && keyPressed->code == sf::Keyboard::Key::U)
                 {
-                    m_editor->UngroupSelected();    
+                    m_editor->UngroupSelected();
+                    continue;
+                }
+
+                // новое 
+                if (ctrl && keyPressed->code == sf::Keyboard::Key::Z)
+                {
+                    m_toolbar->Undo();
+                    continue;
+                }
+
+                if (ctrl && keyPressed->code == sf::Keyboard::Key::Y)
+                {
+                    m_toolbar->Redo();
                     continue;
                 }
             }

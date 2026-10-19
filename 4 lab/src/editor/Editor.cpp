@@ -223,3 +223,25 @@ std::vector<std::unique_ptr<IShape>>& Editor::GetShapes()
 {
     return m_shapes;
 }
+
+void Editor::AddShape(std::unique_ptr<IShape> shape)
+{
+    m_shapes.push_back(std::move(shape));
+}
+
+std::vector<std::unique_ptr<IShape>> Editor::GetShapesCopy() const
+{
+    std::vector<std::unique_ptr<IShape>> copy;
+    copy.reserve(m_shapes.size());
+    for (const auto& shape : m_shapes)
+    {
+        copy.push_back(shape->Clone());
+    }
+    return copy;
+}
+
+void Editor::SetShapes(std::vector<std::unique_ptr<IShape>> newShapes)
+{
+    m_shapes = std::move(newShapes);
+    m_selected.clear();
+}

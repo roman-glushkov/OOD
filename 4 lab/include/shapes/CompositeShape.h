@@ -17,10 +17,18 @@ public:
     std::string GetTypePrefix() const override;
     sf::FloatRect GetBounds() const override;
 
-    // утсановить
     void SetOutlineColor(sf::Color color) override;
     void SetFillColor(sf::Color color) override;
     void SetOutlineThickness(float thickness) override;
+    sf::Color GetOutlineColor() const override;
+    sf::Color GetFillColor() const override;
+    float GetOutlineThickness() const override;
+
+    void Accept(IShapeVisitor& visitor) override;
+
+    // Memento
+    std::unique_ptr<IShape> Clone() const override;
+
 private:
     std::vector<std::unique_ptr<IShape>> m_children;
 };
