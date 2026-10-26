@@ -2,6 +2,8 @@ g++ -std=c++17 -I../include `
     ../src/main.cpp `
     ../src/app/Application.cpp `
     ../src/editor/Editor.cpp `
+    ../src/memento/CanvasMemento.cpp `
+    ../src/memento/HistoryCaretaker.cpp `
     ../src/io/ShapeFactory.cpp `
     ../src/io/ShapeFormatter.cpp `
     ../src/io/ShapeParser.cpp `

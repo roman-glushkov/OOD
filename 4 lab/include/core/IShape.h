@@ -29,6 +29,6 @@ public:
 
     virtual void Accept(IShapeVisitor& visitor) = 0;
 
-    // Memento: клонирование для снимка
+    // клонирование
     virtual std::unique_ptr<IShape> Clone() const = 0;
 };

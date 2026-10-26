@@ -213,7 +213,6 @@ void Editor::UngroupSelected()
     }
 }
 
-// новое
 const std::vector<IShape*>& Editor::GetSelected() const
 {
     return m_selected;
