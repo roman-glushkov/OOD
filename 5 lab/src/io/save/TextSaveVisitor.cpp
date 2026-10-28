@@ -6,6 +6,30 @@
 #include "utils/Config.h"
 #include <limits>
 
+namespace
+{
+    void WriteStyle(std::ostream& out, const IShape& shape)
+    {
+        sf::Color oc = shape.GetOutlineColor();
+        sf::Color fc = shape.GetFillColor();
+        out << Config::PARAM_SEPARATOR << " "
+            << Config::PARAM_OUTLINE << Config::PARAM_ASSIGN
+            << static_cast<int>(oc.r) << Config::COORD_SEPARATOR
+            << static_cast<int>(oc.g) << Config::COORD_SEPARATOR
+            << static_cast<int>(oc.b) << Config::COORD_SEPARATOR
+            << static_cast<int>(oc.a)
+            << Config::PARAM_SEPARATOR << " "
+            << Config::PARAM_FILL << Config::PARAM_ASSIGN
+            << static_cast<int>(fc.r) << Config::COORD_SEPARATOR
+            << static_cast<int>(fc.g) << Config::COORD_SEPARATOR
+            << static_cast<int>(fc.b) << Config::COORD_SEPARATOR
+            << static_cast<int>(fc.a)
+            << Config::PARAM_SEPARATOR << " "
+            << Config::PARAM_THICK << Config::PARAM_ASSIGN
+            << shape.GetOutlineThickness();
+    }
+}
+
 TextSaveVisitor::TextSaveVisitor(std::ostream& out)
     : m_out(out)
 {
@@ -22,8 +46,9 @@ void TextSaveVisitor::Visit(const CTriangle& shape)
           << shape.GetP2().x << Config::COORD_SEPARATOR << shape.GetP2().y
           << Config::PARAM_SEPARATOR << " "
           << Config::PARAM_P3 << Config::PARAM_ASSIGN
-          << shape.GetP3().x << Config::COORD_SEPARATOR << shape.GetP3().y
-          << Config::NEWLINE;
+          << shape.GetP3().x << Config::COORD_SEPARATOR << shape.GetP3().y;
+    WriteStyle(m_out, shape);
+    m_out << Config::NEWLINE;
 }
 
 void TextSaveVisitor::Visit(const CRectangle& shape)
@@ -33,8 +58,9 @@ void TextSaveVisitor::Visit(const CRectangle& shape)
           << shape.GetP1().x << Config::COORD_SEPARATOR << shape.GetP1().y
           << Config::PARAM_SEPARATOR << " "
           << Config::PARAM_P2 << Config::PARAM_ASSIGN
-          << shape.GetP2().x << Config::COORD_SEPARATOR << shape.GetP2().y
-          << Config::NEWLINE;
+          << shape.GetP2().x << Config::COORD_SEPARATOR << shape.GetP2().y;
+    WriteStyle(m_out, shape);
+    m_out << Config::NEWLINE;
 }
 
 void TextSaveVisitor::Visit(const CCircle& shape)
@@ -43,8 +69,9 @@ void TextSaveVisitor::Visit(const CCircle& shape)
           << Config::PARAM_C << Config::PARAM_ASSIGN
           << shape.GetCenter().x << Config::COORD_SEPARATOR << shape.GetCenter().y
           << Config::PARAM_SEPARATOR << " "
-          << Config::PARAM_R << Config::PARAM_ASSIGN << shape.GetRadius()
-          << Config::NEWLINE;
+          << Config::PARAM_R << Config::PARAM_ASSIGN << shape.GetRadius();
+    WriteStyle(m_out, shape);
+    m_out << Config::NEWLINE;
 }
 
 void TextSaveVisitor::Visit(const CompositeShape& shape)

@@ -13,6 +13,14 @@ namespace
     {
         out.write(reinterpret_cast<const char*>(&value), sizeof(T));
     }
+
+    void WriteColor(std::ofstream& out, const sf::Color& c)
+    {
+        Write(out, c.r);
+        Write(out, c.g);
+        Write(out, c.b);
+        Write(out, c.a);
+    }
 }
 
 BinarySaveVisitor::BinarySaveVisitor(std::ofstream& out)
@@ -26,6 +34,10 @@ void BinarySaveVisitor::Visit(const CTriangle& shape)
     Write(m_out, shape.GetP1().x); Write(m_out, shape.GetP1().y);
     Write(m_out, shape.GetP2().x); Write(m_out, shape.GetP2().y);
     Write(m_out, shape.GetP3().x); Write(m_out, shape.GetP3().y);
+
+    WriteColor(m_out, shape.GetOutlineColor());
+    WriteColor(m_out, shape.GetFillColor());
+    Write(m_out, shape.GetOutlineThickness());
 }
 
 void BinarySaveVisitor::Visit(const CRectangle& shape)
@@ -33,6 +45,10 @@ void BinarySaveVisitor::Visit(const CRectangle& shape)
     Write(m_out, Config::BINARY_TYPE_RECTANGLE);
     Write(m_out, shape.GetP1().x); Write(m_out, shape.GetP1().y);
     Write(m_out, shape.GetP2().x); Write(m_out, shape.GetP2().y);
+
+    WriteColor(m_out, shape.GetOutlineColor());
+    WriteColor(m_out, shape.GetFillColor());
+    Write(m_out, shape.GetOutlineThickness());
 }
 
 void BinarySaveVisitor::Visit(const CCircle& shape)
@@ -40,6 +56,10 @@ void BinarySaveVisitor::Visit(const CCircle& shape)
     Write(m_out, Config::BINARY_TYPE_CIRCLE);
     Write(m_out, shape.GetCenter().x); Write(m_out, shape.GetCenter().y);
     Write(m_out, shape.GetRadius());
+
+    WriteColor(m_out, shape.GetOutlineColor());
+    WriteColor(m_out, shape.GetFillColor());
+    Write(m_out, shape.GetOutlineThickness());
 }
 
 void BinarySaveVisitor::Visit(const CompositeShape& shape)

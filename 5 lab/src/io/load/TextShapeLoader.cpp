@@ -3,6 +3,51 @@
 #include "utils/Config.h"
 #include <stdexcept>
 
+namespace
+{
+    void ParseColor(const std::string& line, const std::string& param, sf::Color& out)
+    {
+        std::size_t pos = line.find(param + Config::PARAM_ASSIGN);
+        if (pos == std::string::npos) return;
+        pos += param.size() + 1;
+
+        std::size_t end = line.find(Config::PARAM_SEPARATOR, pos);
+        if (end == std::string::npos) end = line.size();
+
+        std::string v = line.substr(pos, end - pos);
+
+        std::size_t c1 = v.find(Config::COORD_SEPARATOR);
+        if (c1 == std::string::npos) return;
+        std::size_t c2 = v.find(Config::COORD_SEPARATOR, c1 + 1);
+        if (c2 == std::string::npos) return;
+        std::size_t c3 = v.find(Config::COORD_SEPARATOR, c2 + 1);
+        if (c3 == std::string::npos) return;
+
+        int r = std::stoi(v.substr(0, c1));
+        int g = std::stoi(v.substr(c1 + 1, c2 - c1 - 1));
+        int b = std::stoi(v.substr(c2 + 1, c3 - c2 - 1));
+        int a = std::stoi(v.substr(c3 + 1));
+
+        out = sf::Color(
+            static_cast<std::uint8_t>(r),
+            static_cast<std::uint8_t>(g),
+            static_cast<std::uint8_t>(b),
+            static_cast<std::uint8_t>(a));
+    }
+
+    void ParseFloat(const std::string& line, const std::string& param, float& out)
+    {
+        std::size_t pos = line.find(param + Config::PARAM_ASSIGN);
+        if (pos == std::string::npos) return;
+        pos += param.size() + 1;
+
+        std::size_t end = line.find(Config::PARAM_SEPARATOR, pos);
+        if (end == std::string::npos) end = line.size();
+
+        out = std::stof(line.substr(pos, end - pos));
+    }
+}
+
 void TextShapeLoader::OpenFile(const std::string& path)
 {
     m_in.open(path);
@@ -82,6 +127,12 @@ ShapeData TextShapeLoader::ReadNextShapeData()
     data.type   = parsed.type;
     data.points = parsed.points;
     data.radius = parsed.radius;
+
+    // --- Стиль (если есть) ---
+    ParseColor(m_currentLine, Config::PARAM_OUTLINE, data.outlineColor);
+    ParseColor(m_currentLine, Config::PARAM_FILL,    data.fillColor);
+    ParseFloat(m_currentLine, Config::PARAM_THICK,   data.thickness);
+
     return data;
 }
 

@@ -138,5 +138,8 @@ namespace Config
     const std::string PARAM_COUNT      = "COUNT";
 
     const std::string MSG_TEXT_LOAD_NO_LINE       = "TextShapeLoader: no current line";
-    const std::string MSG_TEXT_LOAD_BAD_COMPOSITE = "TextShapeLoader: bad composite structure";    
+    const std::string MSG_TEXT_LOAD_BAD_COMPOSITE = "TextShapeLoader: bad composite structure"; 
+    const std::string PARAM_OUTLINE = "OUTLINE";
+    const std::string PARAM_FILL    = "FILL";
+    const std::string PARAM_THICK   = "THICK";   
 }

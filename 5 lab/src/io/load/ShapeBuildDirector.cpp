@@ -6,6 +6,16 @@
 #include "utils/Config.h"
 #include <stdexcept>
 
+namespace
+{
+    void ApplyStyle(IShape& shape, const ShapeData& data)
+    {
+        shape.SetOutlineColor(data.outlineColor);
+        shape.SetFillColor(data.fillColor);
+        shape.SetOutlineThickness(data.thickness);
+    }
+}
+
 std::unique_ptr<IShape> ShapeBuildDirector::Build(const ShapeData& data) const
 {
     if (data.type == Config::TYPE_TRIANGLE)
@@ -14,7 +24,9 @@ std::unique_ptr<IShape> ShapeBuildDirector::Build(const ShapeData& data) const
         builder.Reset();
         builder.SetType(data.type);
         for (const auto& p : data.points) builder.AddPoint(p);
-        return builder.GetResult();
+        auto shape = builder.GetResult();
+        ApplyStyle(*shape, data);
+        return shape;
     }
     if (data.type == Config::TYPE_RECTANGLE)
     {
@@ -22,7 +34,9 @@ std::unique_ptr<IShape> ShapeBuildDirector::Build(const ShapeData& data) const
         builder.Reset();
         builder.SetType(data.type);
         for (const auto& p : data.points) builder.AddPoint(p);
-        return builder.GetResult();
+        auto shape = builder.GetResult();
+        ApplyStyle(*shape, data);
+        return shape;
     }
     if (data.type == Config::TYPE_CIRCLE)
     {
@@ -31,7 +45,9 @@ std::unique_ptr<IShape> ShapeBuildDirector::Build(const ShapeData& data) const
         builder.SetType(data.type);
         if (!data.points.empty()) builder.AddPoint(data.points[0]);
         builder.SetRadius(data.radius);
-        return builder.GetResult();
+        auto shape = builder.GetResult();
+        ApplyStyle(*shape, data);
+        return shape;
     }
     if (data.type == Config::TYPE_COMPOSITE)
     {

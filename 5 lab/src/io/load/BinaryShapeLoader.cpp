@@ -13,6 +13,13 @@ namespace
             throw std::runtime_error(Config::MSG_LOAD_READ_ERROR);
         }
     }
+
+    void ReadColor(std::ifstream& in, sf::Color& c)
+    {
+        std::uint8_t r, g, b, a;
+        Read(in, r); Read(in, g); Read(in, b); Read(in, a);
+        c = sf::Color(r, g, b, a);
+    }
 }
 
 void BinaryShapeLoader::OpenFile(const std::string& path)
@@ -53,6 +60,9 @@ ShapeData BinaryShapeLoader::ReadOneShape()
             Read(m_in, x); Read(m_in, y);
             data.points.emplace_back(x, y);
         }
+        ReadColor(m_in, data.outlineColor);
+        ReadColor(m_in, data.fillColor);
+        Read(m_in, data.thickness);
     }
     else if (code == Config::BINARY_TYPE_RECTANGLE)
     {
@@ -63,6 +73,9 @@ ShapeData BinaryShapeLoader::ReadOneShape()
             Read(m_in, x); Read(m_in, y);
             data.points.emplace_back(x, y);
         }
+        ReadColor(m_in, data.outlineColor);
+        ReadColor(m_in, data.fillColor);
+        Read(m_in, data.thickness);
     }
     else if (code == Config::BINARY_TYPE_CIRCLE)
     {
@@ -71,6 +84,10 @@ ShapeData BinaryShapeLoader::ReadOneShape()
         Read(m_in, cx); Read(m_in, cy); Read(m_in, r);
         data.points.emplace_back(cx, cy);
         data.radius = r;
+
+        ReadColor(m_in, data.outlineColor);
+        ReadColor(m_in, data.fillColor);
+        Read(m_in, data.thickness);
     }
     else if (code == Config::BINARY_TYPE_COMPOSITE)
     {
@@ -79,7 +96,7 @@ ShapeData BinaryShapeLoader::ReadOneShape()
         Read(m_in, childCount);
         for (std::uint32_t i = 0; i < childCount; ++i)
         {
-            data.children.push_back(ReadOneShape());   // рекурсия без счётчика
+            data.children.push_back(ReadOneShape());
         }
     }
     else
