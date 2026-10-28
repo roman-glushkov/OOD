@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 class IShapeVisitor;
+class IShapeSaveVisitor;  
 
 class IShape
 {
@@ -28,7 +29,7 @@ public:
     virtual float GetOutlineThickness() const = 0;
 
     virtual void Accept(IShapeVisitor& visitor) = 0;
+    virtual void Accept(IShapeSaveVisitor& visitor) = 0; 
 
-    // клонирование
     virtual std::unique_ptr<IShape> Clone() const = 0;
 };

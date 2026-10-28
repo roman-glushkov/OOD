@@ -4,6 +4,7 @@
 #include "utils/Config.h"
 #include <cmath>
 #include "visitors/IShapeVisitor.h"
+#include "io/save/IShapeSaveVisitor.h"
 
 CTriangle::CTriangle(const CPoint& p1, const CPoint& p2, const CPoint& p3) : m_p1(p1), m_p2(p2), m_p3(p3) 
 {
@@ -58,4 +59,9 @@ void CTriangle::Accept(IShapeVisitor& visitor)
 std::unique_ptr<IShape> CTriangle::CloneImpl() const 
 {
     return std::make_unique<CTriangle>(*this);
+}
+
+void CTriangle::Accept(IShapeSaveVisitor& visitor)
+{
+    visitor.Visit(*this);
 }

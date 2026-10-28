@@ -1,7 +1,12 @@
 #include "app/Application.h"
-#include "io/ShapeFactory.h"
-#include "io/ShapeFormatter.h"
-#include "io/ShapeParser.h"
+#include "io/parse/ShapeFactory.h"
+#include "io/parse/ShapeFormatter.h"
+#include "io/parse/ShapeParser.h"
+#include "io/save/ShapeSaver.h"
+#include "io/save/TextSaveStrategy.h"
+#include "io/save/BinarySaveStrategy.h"
+#include "io/load/TextShapeLoader.h"
+#include "io/load/BinaryShapeLoader.h"
 #include "utils/Config.h"
 #include <fstream>
 #include <iostream>
@@ -33,7 +38,7 @@ void Application::Run(const std::string& inputFile)
 
     // вывод
     std::ofstream out(Config::OUTPUT_FILE);
-    std::cout << Config::MSG_SHAPES_PROCESSED << m_shapes.size() << std::endl;
+    std::cout << Config::HOTKEY_HELP << std::endl;
 
     for (const auto& shape : m_shapes)
     {
@@ -90,6 +95,51 @@ void Application::Run(const std::string& inputFile)
                 if (ctrl && keyPressed->code == sf::Keyboard::Key::Y)
                 {
                     m_toolbar->Redo();
+                    continue;
+                }
+
+                // Ctrl+S — сохранить в текст
+                if (ctrl && keyPressed->code == sf::Keyboard::Key::S)
+                {
+                    ShapeSaver saver(std::make_unique<TextSaveStrategy>());
+                    saver.Save(m_shapes, Config::SAVE_FILE_TEXT);
+                    continue;
+                }
+
+                // Ctrl+B — сохранить в бинарь
+                if (ctrl && keyPressed->code == sf::Keyboard::Key::B)
+                {
+                    ShapeSaver saver(std::make_unique<BinarySaveStrategy>());
+                    saver.Save(m_shapes, Config::SAVE_FILE_BINARY);
+                    continue;
+                }
+
+                // Ctrl+O — загрузить из текста
+                if (ctrl && keyPressed->code == sf::Keyboard::Key::O)
+                {
+                    TextShapeLoader loader;
+                    auto loaded = loader.Load(Config::SAVE_FILE_TEXT);
+                    m_editor->SetShapes(std::move(loaded));
+                    m_toolbar->ClearHistory();
+                    continue;
+                }
+
+                // Ctrl+L — загрузить из бинаря
+                if (ctrl && keyPressed->code == sf::Keyboard::Key::L)
+                {
+                    BinaryShapeLoader loader;
+                    auto loaded = loader.Load(Config::SAVE_FILE_BINARY);
+                    m_editor->SetShapes(std::move(loaded));
+                    m_toolbar->ClearHistory();
+                    continue;
+                }
+
+                // Ctrl+N — новый холст (полная очистка)
+                if (ctrl && keyPressed->code == sf::Keyboard::Key::N)
+                {
+                    m_shapes.clear();
+                    m_editor->ClearSelection();
+                    m_toolbar->ClearHistory();
                     continue;
                 }
             }

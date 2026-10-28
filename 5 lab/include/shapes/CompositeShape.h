@@ -25,8 +25,10 @@ public:
     float GetOutlineThickness() const override;
 
     void Accept(IShapeVisitor& visitor) override;
+    void Accept(IShapeSaveVisitor& visitor) override; 
 
-    // Memento
+    const std::vector<std::unique_ptr<IShape>>& GetChildren() const { return m_children; }  
+
     std::unique_ptr<IShape> Clone() const override;
 
 private:

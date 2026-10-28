@@ -3,7 +3,7 @@
 #include "core/CPoint.h"
 #include "utils/Config.h"
 
-class CCircle : public ShapeAdapter<sf::CircleShape> 
+class CCircle : public ShapeAdapter<sf::CircleShape>
 {
 public:
     CCircle(const CPoint& center, double radius);
@@ -11,9 +11,13 @@ public:
     double GetPerimeter() const override;
     std::string GetTypePrefix() const override { return Config::TYPE_CIRCLE; }
 
-    bool Contains(const sf::Vector2f& point) const override; 
-    void Move(float dx, float dy) override; 
+    bool Contains(const sf::Vector2f& point) const override;
+    void Move(float dx, float dy) override;
     void Accept(IShapeVisitor& visitor) override;
+    void Accept(IShapeSaveVisitor& visitor) override;   
+
+    const CPoint& GetCenter() const { return m_center; }   
+    double GetRadius() const { return m_radius; }          
 
 protected:
     std::unique_ptr<IShape> CloneImpl() const override;

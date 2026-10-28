@@ -1,6 +1,7 @@
 #include "shapes/CompositeShape.h"
 #include "utils/Config.h"
 #include "visitors/IShapeVisitor.h"
+#include "io/save/IShapeSaveVisitor.h"
 
 void CompositeShape::Add(std::unique_ptr<IShape> shape) 
 {
@@ -127,4 +128,9 @@ std::unique_ptr<IShape> CompositeShape::Clone() const
         copy->Add(child->Clone());
     }
     return copy;
+}
+
+void CompositeShape::Accept(IShapeSaveVisitor& visitor)
+{
+    visitor.Visit(*this);
 }

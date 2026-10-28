@@ -1,4 +1,4 @@
-#include "io/ShapeParser.h"
+#include "io/parse/ShapeParser.h"
 #include "utils/Config.h"
 #include <sstream>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "core/IShape.h"
-#include "io/ShapeParser.h"
+#include "io/parse/ShapeParser.h"
 
 class ShapeFactory 
 {

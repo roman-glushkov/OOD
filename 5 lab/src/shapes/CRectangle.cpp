@@ -5,6 +5,7 @@
 #include <cmath>
 #include <algorithm>
 #include "visitors/IShapeVisitor.h"
+#include "io/save/IShapeSaveVisitor.h"
 
 CRectangle::CRectangle(const CPoint& p1, const CPoint& p2) : m_p1(p1), m_p2(p2) 
 {
@@ -52,4 +53,9 @@ void CRectangle::Accept(IShapeVisitor& visitor)
 std::unique_ptr<IShape> CRectangle::CloneImpl() const 
 {
     return std::make_unique<CRectangle>(*this);
+}
+
+void CRectangle::Accept(IShapeSaveVisitor& visitor)
+{
+    visitor.Visit(*this);
 }

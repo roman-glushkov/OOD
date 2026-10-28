@@ -4,6 +4,7 @@
 #include "utils/Config.h"
 #include <cmath>
 #include "visitors/IShapeVisitor.h"
+#include "io/save/IShapeSaveVisitor.h"
 
 CCircle::CCircle(const CPoint& center, double radius) : m_center(center), m_radius(radius) 
 {
@@ -45,4 +46,9 @@ void CCircle::Accept(IShapeVisitor& visitor)
 std::unique_ptr<IShape> CCircle::CloneImpl() const 
 {
     return std::make_unique<CCircle>(*this);
+}
+
+void CCircle::Accept(IShapeSaveVisitor& visitor)
+{
+    visitor.Visit(*this);
 }

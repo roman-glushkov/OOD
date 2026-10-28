@@ -20,6 +20,7 @@ public:
     void Redo();
 
     bool m_isFillMode = false;
+    void ClearHistory();
 
 private:
     void BuildButtons();

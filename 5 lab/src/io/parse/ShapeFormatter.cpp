@@ -1,4 +1,4 @@
-#include "io/ShapeFormatter.h"
+#include "io/parse/ShapeFormatter.h"
 #include "utils/Config.h"
 #include <sstream>
 #include <iomanip>

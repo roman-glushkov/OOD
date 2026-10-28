@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cstdint>
 
 namespace Config
 {
@@ -92,4 +93,50 @@ namespace Config
     const float TOOLBAR_HEIGHT      = 40.0f;
     const float TOOLBAR_BUTTON_SIZE = 30.0f;
     const float TOOLBAR_PADDING     = 5.0f;
+
+    const char NEWLINE = '\n';
+    const std::uint8_t BINARY_TYPE_TRIANGLE  = 0;
+    const std::uint8_t BINARY_TYPE_RECTANGLE = 1;
+    const std::uint8_t BINARY_TYPE_CIRCLE    = 2;
+    const std::uint8_t BINARY_TYPE_COMPOSITE = 3;
+
+    const std::size_t TRIANGLE_POINTS_REQUIRED  = 3;
+    const std::size_t RECTANGLE_POINTS_REQUIRED = 2;
+
+    const std::string MSG_SAVE_OPEN_FAILED_TEXT   = "TextSaveStrategy: cannot open file: ";
+    const std::string MSG_SAVE_OPEN_FAILED_BINARY = "BinarySaveStrategy: cannot open file: ";
+    const std::string MSG_SAVER_NULL_STRATEGY     = "ShapeSaver: strategy is null";
+    const std::string MSG_SAVE_UNKNOWN_TYPE       = "BinarySaveStrategy: unknown type: ";
+    const std::string MSG_LOAD_READ_ERROR         = "BinaryShapeLoader: read error";
+    const std::string MSG_LOAD_OPEN_FAILED        = "BinaryShapeLoader: cannot open file: ";
+    const std::string MSG_LOAD_UNKNOWN_TYPE       = "BinaryShapeLoader: unknown type code";
+    const std::string MSG_TEXT_LOAD_OPEN_FAILED   = "TextShapeLoader: cannot open file: ";
+    const std::string MSG_TRIANGLE_BUILDER_POINTS  = "TriangleBuilder: need 3 points";
+    const std::string MSG_RECTANGLE_BUILDER_POINTS = "RectangleBuilder: need 2 points";
+    const std::string MSG_CIRCLE_BUILDER_NO_CENTER = "CircleBuilder: no center";
+    const std::string MSG_DIRECTOR_UNKNOWN_TYPE    = "ShapeBuildDirector: unknown type: ";
+    const std::string MSG_TRIANGLE_BUILDER_TYPE  = "TriangleBuilder: wrong type: ";
+    const std::string MSG_RECTANGLE_BUILDER_TYPE = "RectangleBuilder: wrong type: ";
+    const std::string MSG_CIRCLE_BUILDER_TYPE    = "CircleBuilder: wrong type: ";
+    const std::string SAVE_FILE_TEXT   = "shapes.txt";
+    const std::string SAVE_FILE_BINARY = "shapes.bin";
+    const std::string MSG_COMPOSITE_EMPTY = "CompositeShape: empty composite";
+
+    const std::string HOTKEY_HELP =
+        "Hotkeys:\n"
+        "  Ctrl+S  - save to text file (shapes.txt)\n"
+        "  Ctrl+B  - save to binary file (shapes.bin)\n"
+        "  Ctrl+O  - load from text file (shapes.txt)\n"
+        "  Ctrl+L  - load from binary file (shapes.bin)\n"
+        "  Ctrl+N  - new canvas (clear all shapes)\n"
+        "  Ctrl+Z  - undo\n"
+        "  Ctrl+Y  - redo\n"
+        "  Ctrl+G  - group selected\n"
+        "  Ctrl+U  - ungroup selected\n";
+
+    const std::string PREFIX_COMPOSITE = "COMPOSITE:";
+    const std::string PARAM_COUNT      = "COUNT";
+
+    const std::string MSG_TEXT_LOAD_NO_LINE       = "TextShapeLoader: no current line";
+    const std::string MSG_TEXT_LOAD_BAD_COMPOSITE = "TextShapeLoader: bad composite structure";    
 }

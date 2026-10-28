@@ -189,3 +189,8 @@ void Toolbar::Redo()
         if (m_tool) m_tool->ResetDragState();
     }
 }
+
+void Toolbar::ClearHistory()
+{
+    m_history.Clear();
+}

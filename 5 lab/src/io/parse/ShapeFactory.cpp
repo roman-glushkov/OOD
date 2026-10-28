@@ -1,4 +1,4 @@
-#include "io/ShapeFactory.h"
+#include "io/parse/ShapeFactory.h"
 #include "shapes/CTriangle.h"
 #include "shapes/CRectangle.h"
 #include "shapes/CCircle.h"
